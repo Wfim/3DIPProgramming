@@ -1,0 +1,6 @@
+import tkinter as tk
+mainmenu = tk.Tk()
+mainmenu.geometry("800x800")
+
+
+
