@@ -1,0 +1,10 @@
+import tkinter as tk
+mainmenu = tk.Tk()
+mainmenu.geometry("800x800")
+
+title = tk.Label(text="Mission Planer, 2nd Edition", borderwidth = 2, relief="solid", height=4,width=25)
+
+greeting = tk.Button( text="News", width=20, height=5, fg="blue")
+
+
+
