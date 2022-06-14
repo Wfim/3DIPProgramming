@@ -1,0 +1,50 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+from tkinter import * 
+
+mainmenu = tk.Tk()
+mainmenu.geometry("800x800")
+mainmenu.resizable(False, False)
+
+#CREATES A TEXT BOX###
+#text= Text(mainmenu,wrap=WORD)
+#text.pack()
+
+title = tk.Label(text="Mission Planer, 2nd Edition", borderwidth = 2, relief="solid", height=4,width=28)
+delta_v = tk.Button(text="Delta-V Calculator", borderwidth = 2, relief="solid", height=4,width=25)
+porkchop = tk.Button(text="Porkchop Chart Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+transferplot = tk.Button(text="Transfer Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+orbitplot = tk.Button(text="Orbit Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+orbitinfo = tk.Button(text="Orbit Information", borderwidth = 2, relief="solid", height=4,width=25)
+launchvehicle = tk.Button(text="Launch Vehicle", borderwidth = 2, relief="solid", height=4,width=25)
+spacesystems = tk.Button(text="Space Systems", borderwidth = 2, relief="solid", height=4,width=25)
+
+newsframe = tk.Label( text="This august Cassini completed one of its dives through Saturns rings as apart of the 'Grand Finale' coined by NASA Jet Propulsion Laboratory officals", 
+                     width=35, height=47, fg="blue", borderwidth = 2, relief="solid", anchor="center", justify=LEFT, wraplength=300)
+news = tk.Label( text="News", width=35, height=5, fg="blue", borderwidth = 2, relief="solid")
+
+# Create a canvas widget
+canvas=Canvas(mainmenu, width=300, height=300)
+# Load the image
+img_cassini=ImageTk.PhotoImage(file="images/cassinihyugen.jpeg")
+# Add the image in the canvas
+canvas.create_image(150, 200, image=img_cassini, anchor="center")
+
+#images
+canvas.place(x=455,y=460)
+
+#labels and buttons
+title.place(x=30, y=15)
+newsframe.place(x=450, y=15)
+news.place(x=450, y=15)
+delta_v.place(x=30, y=100)
+porkchop.place(x=30, y=200)
+transferplot.place(x=30, y=300)
+orbitplot.place(x=30, y=400)
+orbitinfo.place(x=30, y=500)
+launchvehicle.place(x=30, y=600)
+spacesystems.place(x=30, y=700)
+
+mainmenu.mainloop()
+
+
