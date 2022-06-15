@@ -1,0 +1,29 @@
+def delta_v():
+    delta_v = tk.Tk()
+    delta_v.geometry("800x800")
+    delta_v.resizable(False, False)
+    delta_v_title = tk.Label(text="Rocket Equation Calculator Delta-V Calculator", borderwidth = 2, relief="solid", height=6,width=28, anchor="center", justify=CENTER, wraplength=200)
+    
+    req_wetmass= tk.Button(text="Required Wet Mass Calculator", borderwidth = 2, relief="solid", height=4,width=25, justify=CENTER, wraplength=200)
+    
+    WetMass_Title = Label(delta_v, text="Wet Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    WetMass_Title.place(x=115, y=232)
+    WetMass_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    WetMass_entry.place(x=270, y=230)
+    
+    DryMass_Title = Label(delta_v, text="Dry Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    DryMass_Title.place(x=115, y=282)
+    DryMass_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    DryMass_entry.place(x=270, y=280)
+    
+    #dropdown
+    isp_options = ["", "ISP", "Exhaust Velocity"]
+    ISP_dropdown = OptionMenu(delta_v, *isp_options, clicked)
+    ISP_dropdown.place(x=115, y=332)
+    ISP_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    ISP_entry.place(x=270, y=330)
+    
+  
+    
+  
+    
