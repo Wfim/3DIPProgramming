@@ -1,0 +1,139 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+from tkinter import * 
+    
+def mainmenu():
+    mainmenu = tk.Tk()
+    mainmenu.geometry("800x800")
+    mainmenu.resizable(False, False)
+    
+    title = tk.Label(text="Mission Planer, 2nd Edition", borderwidth = 2, relief="solid", height=4,width=28)
+    title.place(x=30, y=15)
+    
+    delta_v = tk.Button(text="Delta-V Calculator", borderwidth = 2, relief="solid", height=4,width=25)
+    delta_v.place(x=30, y=100)
+    
+    porkchop = tk.Button(text="Porkchop Chart Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    porkchop.place(x=30, y=200)
+    
+    transferplot = tk.Button(text="Transfer Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    transferplot.place(x=30, y=300)
+    
+    orbitplot = tk.Button(text="Orbit Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    orbitplot.place(x=30, y=400)
+    
+    orbitinfo = tk.Button(text="Orbit Information", borderwidth = 2, relief="solid", height=4,width=25)
+    orbitinfo.place(x=30, y=500)
+    
+    launchvehicle = tk.Button(text="Launch Vehicle", borderwidth = 2, relief="solid", height=4,width=25)
+    launchvehicle.place(x=30, y=600)
+    
+    spacesystems = tk.Button(text="Space Systems", borderwidth = 2, relief="solid", height=4,width=25)
+    spacesystems.place(x=30, y=700)
+    
+    newsframe = tk.Label( text="This august Cassini completed one of its dives through Saturns rings as apart of the 'Grand Finale' coined by NASA Jet Propulsion Laboratory officals", 
+                         width=35, height=47, fg="red", borderwidth = 2, relief="solid", anchor="center", justify=LEFT, wraplength=300)
+    newsframe.place(x=450, y=15)
+    
+    news = tk.Label( text="News", width=35, height=5, fg="red", borderwidth = 2, relief="solid")
+    news.place(x=450, y=15)
+    
+    # Create a canvas widget
+    canvas=Canvas(mainmenu, width=300, height=300)
+    # Load the image
+    img_cassini=ImageTk.PhotoImage(file="images/cassinihyugen.jpeg")
+    # Add the image in the canvas
+    canvas.create_image(150, 200, image=img_cassini, anchor="center")
+    #images
+    canvas.place(x=455,y=460)
+    
+    mainmenu.mainloop()
+    
+
+
+def delta_v():
+    
+    
+    def helloworld():
+        print("Hello World")
+    
+    
+    delta_v = tk.Tk()
+    delta_v.geometry("800x800")
+    delta_v.resizable(False, False)
+    delta_v_title = tk.Label(text="Rocket Equation Calculator Delta-V Calculator", borderwidth = 2, relief="solid", height=6,width=28, anchor="center", justify=CENTER, wraplength=200)
+    delta_v_title.place(x=270, y=15)
+    
+    req_wetmass= tk.Button(text="Required Wet Mass Calculator", borderwidth = 2, relief="solid", height=4,width=25, justify=CENTER, wraplength=200)
+    req_wetmass.place(x=270, y=135)
+    
+    WetMass_Title = Label(delta_v, text="Wet Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    WetMass_Title.place(x=115, y=232)
+    
+    WetMass_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    WetMass_entry.place(x=270, y=230)
+    
+    DryMass_Title = Label(delta_v, text="Dry Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    DryMass_Title.place(x=115, y=282)
+    
+    DryMass_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    DryMass_entry.place(x=270, y=280)
+    
+    isp_options = ["", "ISP", "Exhaust Velocity"]
+    ISP_dropdown = OptionMenu(delta_v, *isp_options)
+    ISP_dropdown.place(x=115, y=332)
+   
+    ISP_entry = Entry(delta_v, width=23, font=('Arial 18'))
+    ISP_entry.place(x=270, y=330)
+                                                                                                                                    #################
+    DeltaV_Calc = tk.Button(text="Calculate", borderwidth = 3, relief="solid", height=2,width=25, justify=CENTER, wraplength=200, command=helloworld)
+    DeltaV_Calc.place(x=270,y=380)
+    
+    Calc_Output = Text(delta_v, height = 2, width = 36)
+    Calc_Output.place(x=270, y=440)
+    Calc_Output.config(state=DISABLED)
+    
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+ 
+    # Create Dropdown menu
+   # drop = OptionMenu( root , clicked , *options )
+   # drop.pack()
+    
+    #porkchop = tk.Button(text="Porkchop Chart Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    #transferplot = tk.Button(text="Transfer Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+   
+    #newsframe = tk.Label( text="This august Cassini completed one of its dives through Saturns rings as apart of the 'Grand Finale' coined by NASA Jet Propulsion Laboratory officals", 
+    #                     width=35, height=47, fg="blue", borderwidth = 2, relief="solid", anchor="center", justify=LEFT, wraplength=300)
+   
+    # Create a canvas widget
+   # canvas=Canvas(delta_v, width=300, height=300)
+    # Load the image
+   # img_cassini=ImageTk.PhotoImage(file="images/Delta_V_Earth_Moon_Mars.png")
+    # Add the image in the canvas
+   # canvas.create_image(5, 200, image=img_cassini, anchor="center")
+    #images
+   # canvas.place(x=455,y=460)
+   
+    #labels and button
+    #news.place(x=450, y=15)
+    #delta_v.place(x=30, y=100)
+    #porkchop.place(x=30, y=200)
+    #transferplot.place(x=30, y=300)
+    #orbitplot.place(x=30, y=400)
+    #orbitinfo.place(x=30, y=500)
+    #launchvehicle.place(x=30, y=600)
+    #spacesystems.place(x=30, y=700)
+    
+    delta_v.mainloop()
+
+mainmenu()
+delta_v()
