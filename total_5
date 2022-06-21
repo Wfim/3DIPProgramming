@@ -1,0 +1,245 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+from tkinter import *
+import math
+
+from astropy import units as u
+
+from poliastro.bodies import Earth, Mercury, Venus, Moon, Mars, Jupiter, Saturn, Uranus, Neptune
+from poliastro.plotting.porkchop import PorkchopPlotter
+from poliastro.util import time_range
+
+
+
+def porkchop_chart():
+    launch_span = time_range("2005-04-30", end="2005-10-07")
+    arrival_span = time_range("2005-11-16", end="2006-12-21")
+
+    porkchop_plot = PorkchopPlotter(Earth, 
+                                    target, 
+                                    launch_span, 
+                                    arrival_span)
+    dv_dpt, dv_arr, c3dpt, c3arr, tof = porkchop_plot.porkchop()
+
+
+ 
+#BUTTON FUNCTIONS
+#######################################################################################################################
+def delta_v_calc_b(wetmass_entry, drymass_entry, calc_output, isp_entry, isp_selection):
+    print("THE COLLAPSE OF THE FINANCIAL SECTOR IS IMMINENT")
+    calc_output.delete("1.0","end")
+    if isp_selection.get() == "ISP":
+        wetmass_value = int(wetmass_entry.get())
+        drymass_value = int(drymass_entry.get())
+        isp_value = int(isp_entry.get())
+        delta_calc_final = math.log(wetmass_value / drymass_value) * isp_value * 9.81
+        calc_output.insert('1.0', delta_calc_final)
+    elif isp_selection.get() == "Exhaust Velocity":
+        wetmass_value = int(wetmass_entry.get())
+        drymass_value = int(drymass_entry.get())
+        isp_value= int(isp_entry.get())
+        delta_calc_final = math.log(wetmass_value / drymass_value) * isp_value
+        calc_output.insert('1.0', delta_calc_final)
+  
+#######################################################################################################################  
+    
+def mainmenu_page():
+    mainmenu = tk.Tk()
+    mainmenu.geometry("800x800")
+    mainmenu.resizable(False, False)
+  
+    title = tk.Label(text="Mission Planer, 2nd Edition", borderwidth = 2, relief="solid", height=4,width=28)
+    title.place(x=30, y=15)
+  
+    delta_v = tk.Button(text="Delta-V Calculator", borderwidth = 2, relief="solid", height=4, width=25, command=delta_v_page)
+    delta_v.place(x=30, y=100)
+  
+    porkchop = tk.Button(text="Porkchop Chart Plotter", borderwidth = 2, relief="solid", height=4,width=25, command=porkchop_page)
+    porkchop.place(x=30, y=200)
+  
+    transferplot = tk.Button(text="Transfer Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    transferplot.place(x=30, y=300)
+  
+    orbitplot = tk.Button(text="Orbit Plotter", borderwidth = 2, relief="solid", height=4,width=25)
+    orbitplot.place(x=30, y=400)
+  
+    orbitinfo = tk.Button(text="Orbit Information", borderwidth = 2, relief="solid", height=4,width=25)
+    orbitinfo.place(x=30, y=500)
+  
+    launchvehicle = tk.Button(text="Launch Vehicle", borderwidth = 2, relief="solid", height=4,width=25)
+    launchvehicle.place(x=30, y=600)
+  
+    spacesystems = tk.Button(text="Space Systems", borderwidth = 2, relief="solid", height=4,width=25)
+    spacesystems.place(x=30, y=700)
+  
+    newsframe = tk.Label( text="This August Cassini completed one of its dives through Saturns rings as apart of the 'Grand Finale' coined by NASA Jet Propulsion Laboratory officals",
+                         width=35, height=47, fg="red", borderwidth = 2, relief="solid", anchor="center", justify=LEFT, wraplength=300)
+    newsframe.place(x=450, y=15)
+  
+    news = tk.Label( text="News", width=35, height=5, fg="red", borderwidth = 2, relief="solid")
+    news.place(x=450, y=15)
+  
+    # Create a canvas widget
+    canvas=Canvas(mainmenu, width=300, height=300)
+    # Load the image
+    img_cassini=ImageTk.PhotoImage(file="images/cassinihyugen.jpeg")
+    # Add the image in the canvas
+    canvas.create_image(150, 200, image=img_cassini, anchor="center")
+    #images
+    canvas.place(x=455,y=460)
+  
+    mainmenu.mainloop()
+  
+def delta_v_page():
+    delta_v_tk = tk.Tk()
+    delta_v_tk.geometry("800x800")
+    delta_v_tk.resizable(False, False)
+   
+    homereturn = tk.Button(delta_v_tk, text="Home", height=1, width=1, bd=1, command = mainmenu_page)
+    homereturn.place(x=10, y=5)
+  
+    delta_v_title = tk.Label(delta_v_tk, text="Rocket Equation Calculator Delta-V Calculator", borderwidth = 2, relief="solid", height=6,width=28, anchor="center", justify=CENTER, wraplength=200)
+    delta_v_title.place(x=270, y=15)
+  
+    req_wetmass= tk.Button(delta_v_tk, text="Required Wet Mass Calculator", bd = 2, relief="solid", height=4,width=25, justify=CENTER, wraplength=200)
+    req_wetmass.place(x=270, y=135)
+  
+    wetmass_title = tk.Label(delta_v_tk, text="Wet Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    wetmass_title.place(x=115, y=232)
+  
+    wetmass_entry = Entry(delta_v_tk, width=23, font=('Arial 18'))
+    wetmass_entry.place(x=270, y=230)
+  
+    drymass_Title = tk.Label(delta_v_tk, text="Dry Mass (Kg)", bd = 2, relief="solid", font=('Arial 18'))
+    drymass_Title.place(x=115, y=282)
+  
+    drymass_entry = Entry(delta_v_tk, width=23, font=('Arial 18'))
+    drymass_entry.place(x=270, y=280)
+  
+    
+    isp_options = ["ISP", "Exhaust Velocity"]
+    isp_selection = StringVar(delta_v_tk)
+    isp_selection.set(isp_options[0])
+    isp_dropdown = OptionMenu(delta_v_tk, isp_selection, *isp_options)
+    isp_dropdown.place(x=115, y=332)
+ 
+    isp_entry = Entry(delta_v_tk, width=23, font=('Arial 18'))
+    isp_entry.place(x=270, y=330)
+                                                                                                                                  
+    deltav_calc = tk.Button(delta_v_tk, text="Calculate", borderwidth = 3, relief="solid", height=2,width=25, justify=CENTER, wraplength=200,
+    command=lambda: delta_v_calc_b(wetmass_entry, drymass_entry, calc_output, isp_entry, isp_selection))
+    deltav_calc.place(x=270,y=380)
+  
+    calc_output = Text(delta_v_tk, height = 2, width = 36)
+    calc_output.place(x=270, y=440)
+    #calc_output.config(state=DISABLED)
+  
+    delta_v_tk.mainloop()
+   
+def porkchop_page():
+    porkchop_tk = tk.Tk()
+    porkchop_tk.geometry("800x800")
+    porkchop_tk.resizable(False, False)   
+    
+    homereturn = tk.Button(porkchop_tk, text="Home", height=1, width=1, bd=1, command=mainmenu_page)
+    homereturn.place(x=10, y=5)
+  
+    porkchop_title = tk.Label(porkchop_tk, text="Porkchop Plot Plotter!", borderwidth = 2, relief="solid", height=6,width=28, anchor="center", justify=CENTER, wraplength=200)
+    porkchop_title.place(x=270, y=15)
+   
+    ###################################################################### Labels 
+   
+    launch_window_label= tk.Label(porkchop_tk, text="Launch Window", bd = 2, relief="solid", height=2,width=28, justify=CENTER, wraplength=200)
+    launch_window_label.place(x=270, y=135)
+    
+    arrival_window_label= tk.Label(porkchop_tk, text="Arrival Window", bd = 2, relief="solid", height=2,width=28, justify=CENTER, wraplength=200)
+    arrival_window_label.place(x=270, y=305)
+
+    inital_launch_label = tk.Label(porkchop_tk, text="Inital", bd=2, width=4, relief="solid", font=("Arial 14"))
+    inital_launch_label.place(x=225, y=215)
+    
+    final_launch_label = tk.Label(porkchop_tk, text="Final", bd=2, width=4, relief="solid", font=("Arial 14"))
+    final_launch_label.place(x=225, y=265)
+    
+    launch_window_day_label = tk.Label(porkchop_tk, text="Day", bd=2, width=4, relief="solid", font=("Arial 14"))
+    launch_window_day_label.place(x=280, y=185)
+    
+    launch_window_month_label = tk.Label(porkchop_tk, text="Month", bd=2, width=4, relief="solid", font=("Arial 14"))
+    launch_window_month_label.place(x=380, y=185)
+    
+    launch_window_year_label = tk.Label(porkchop_tk, text="Year", bd=2, width=4, relief="solid", font=("Arial 14"))
+    launch_window_year_label.place(x=480, y=185)
+
+    inital_arrival_label = tk.Label(porkchop_tk, text="Inital", bd=2, width=4, relief="solid", font=("Arial 14"))
+    inital_arrival_label.place(x=225, y=390)
+    
+    final_arrival_label = tk.Label(porkchop_tk, text="Final", bd=2, width=4, relief="solid", font=("Arial 14"))
+    final_arrival_label.place(x=225, y=440)
+    
+    arrival_window_day_label = tk.Label(porkchop_tk, text="Day", bd=2, width=4, relief="solid", font=("Arial 14"))
+    arrival_window_day_label.place(x=280, y=360)
+    
+    arrival_window_month_label = tk.Label(porkchop_tk, text="Month", bd=2, width=4, relief="solid", font=("Arial 14"))
+    arrival_window_month_label.place(x=380, y=360)
+    
+    arrival_window_year_label = tk.Label(porkchop_tk, text="Year", bd=2, width=4, relief="solid", font=("Arial 14"))
+    arrival_window_year_label.place(x=485, y=360)
+
+    ################################################################################### Launch Window Inputs
+    launch_window_day_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_day_inital.place(x=270, y=210)
+   
+    launch_window_month_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_month_inital.place(x=370, y=210)
+   
+    launch_window_year_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_year_inital.place(x=470, y=210)
+    
+    launch_window_day_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_day_final.place(x=270, y=260)
+   
+    launch_window_month_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_month_final.place(x=370, y=260)
+   
+    launch_window_year_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    launch_window_year_final.place(x=470, y=260)
+    
+    ##################################################################################### Arrival Window Input
+    arrival_window_day_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_day_inital.place(x=270, y=390)
+   
+    arrival_window_month_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_month_inital.place(x=370, y=390)
+   
+    arrival_window_year_inital = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_year_inital.place(x=470, y=390)
+    
+    arrival_window_day_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_day_final.place(x=270, y=440)
+   
+    arrival_window_month_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_month_final.place(x=370, y=440)
+   
+    arrival_window_year_final = Entry(porkchop_tk, width=6, font=("Arial 14"))
+    arrival_window_year_final.place(x=470, y=440)
+    #####################################################################################
+    porkchop_plot_button = tk.Button(porkchop_tk, text="Plot that Porkchop!", width=25, height=2, bd = 2)
+    porkchop_plot_button.place(x=270, y=480)
+
+    
+    porkchop_tk.mainloop()
+    
+    
+    
+    
+    
+    
+mainmenu_page() #STARTS THE CODE DO NOT TOUCH!
+    # Create a canvas widget
+   # canvas=Canvas(delta_v, width=300, height=300)
+    # Load the image
+   # img_cassini=ImageTk.PhotoImage(file="images/Delta_V_Earth_Moon_Mars.png")
+    # Add the image in the canvas
+   # canvas.create_image(5, 200, image=img_cassini, anchor="center")
+    #images
+   # canvas.place(x=455,y=460)
