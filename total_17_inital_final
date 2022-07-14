@@ -324,6 +324,26 @@ def porkchop_chart(launch_window_year_inital, launch_window_month_inital, launch
        return
    else:
        pass
+   ####################ARRIVAL WINDOW FINAL
+   ################################ ARRIVAL WINDOW FINAL
+   if len(arrival_window_year_final.get()) == 4:
+           pass
+   else:
+       error_quantity_error()
+       return
+ 
+   if 1 < len(arrival_window_month_final.get()) > 2:
+       error_quantity_error()
+       return
+   else:
+       pass
+   
+   if 1 < len(arrival_window_day_final.get()) > 2:
+       error_quantity_error()
+       return
+   else:
+       pass
+   ############################## ARRIVAL WINDOW FINAL
  
    ###########################################################################
    launch_window_year_inital_value = str(launch_window_year_inital.get())
