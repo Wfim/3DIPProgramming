@@ -1064,33 +1064,31 @@ def space_systems_main_page(mainmenu):
                                          command=satellite_parts_service_providers_page)
     satellite_parts_service_providers.place(x=550, y=180)
     
-    launch_vehicle_page_information_1 = tk.Label(space_systems_tk, 
-    text=("This page contains information regarding numerous launch vehicles."
-          " To access the data select a vehicle from the drop down menu and then click "
-          "the 'Show launch vehicle Data' button. The page shows a variety of information."
-          " From payload capacity to flight faliure rates.")
+    launch_system_providers_information = tk.Label(space_systems_tk, 
+    text=("Launch System Providers are companies that offer a range."
+          " of different launch vehicles and systems to carry payloads."
+          " to Earths orbit and beyond."
+          " The selection of companies are succesful and operational.")
     ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
-    launch_vehicle_page_information_1.place(x=20, y=420)
+    launch_system_providers_information.place(x=20, y=420)
     
-    launch_vehicle_page_information_2 = tk.Label(space_systems_tk, 
-    text=("This page contains information regarding numerous launch vehicles."
-          " To access the data select a vehicle from the drop down menu and then click "
-          "the 'Show launch vehicle Data' button. The page shows a variety of information."
-          " From payload capacity to flight faliure rates.")
+    satellite_service_providers_information = tk.Label(space_systems_tk, 
+    text=("Satellite Service Providers provide services in the form of different"
+          " satellite buses that can be used to carry payloads and instruments that are crtitical"
+          " to the mission. These companies have numerous launches under their belt."
+          " They are also Industry specalists")
     ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
-    launch_vehicle_page_information_2.place(x=270, y=420)
+    satellite_service_providers_information.place(x=270, y=420)
     
-    launch_vehicle_page_information_3 = tk.Label(space_systems_tk, 
-    text=("This page contains information regarding numerous launch vehicles."
-          " To access the data select a vehicle from the drop down menu and then click "
-          "the 'Show launch vehicle Data' button. The page shows a variety of information."
-          " From payload capacity to flight faliure rates.")
+    satellite_parts_service_providers_information = tk.Label(space_systems_tk, 
+    text=("Satellite Part Providers provide services in the form of different"
+          " satellite parts. Parts range from Electrical Devices, Communications, "
+          " and Remote Sensing sensors. All companies are industry specialists"
+          " with their products tried and tested in numerous space missions.")
     ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
-    launch_vehicle_page_information_3.place(x=520, y=420)
+    satellite_parts_service_providers_information.place(x=520, y=420)
     
-    
-    
-
+      
     space_systems_tk.mainloop()   
     
 def launch_system_providers_page():
@@ -1136,6 +1134,11 @@ def launch_system_providers_page():
    
     ########################################
     ######################################## Labels
+    lift_capability_label = tk.Label(launch_system_providers_tk, text="Lift Capability\nof Launch Vehicles"
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    lift_capability_label.place(x=600, y=80)
+    
     ula_label = tk.Label(launch_system_providers_tk, text="Medium to Heavy Lift", borderwidth = 2, 
                          relief="solid", height=4,width=20, anchor="center", wraplength=200)
     ula_label.place(x=600, y=180)
@@ -1240,6 +1243,12 @@ def satellite_service_providers_page():
     lockheed_martin_button.place(x=350, y=660)
     
     ################## Labels
+    
+    satellite_provider_examples_label = tk.Label(satellite_service_providers_tk, 
+                                     text="Examples of\nSatellite Buses"
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    satellite_provider_examples_label.place(x=600, y=80)
     
     northrup_grumman_label = tk.Label(satellite_service_providers_tk, 
                                       text="RapidStar, LEOStar, GEOStar", borderwidth = 2, 
@@ -1349,6 +1358,12 @@ def satellite_parts_service_providers_page():
     northrop_grumman_button.place(x=350, y=660)
     
     ################## Labels
+    satellite_part_provider_examples_label = tk.Label(satellite__parts_service_providers_tk, 
+                                     text="Examples of\nSatellite Parts"
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    satellite_part_provider_examples_label.place(x=600, y=80)
+    
    
     honeywell_label = tk.Label(satellite__parts_service_providers_tk, 
                                text="Communications, Computer Systems, Structure, Remote Sensing", 
