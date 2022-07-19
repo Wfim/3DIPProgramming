@@ -1,149 +1,151 @@
-import tkinter as tk
-from PIL import Image, ImageTk
-import PIL.Image
-from tkinter import *
+import tkinter as tk  #Imports Tkinter Library
+from PIL import Image, ImageTk #Imports Pillow Library and changes the variable to be called by
+import PIL.Image #Imports Pillow Library 
+from tkinter import * #Imports Tkinter Library
  
-import math
+import math #Imports Math so simple calculations for Delta-V Calculator can be conducted
  
-from astropy import units as u
-from astropy.time import Time
+from astropy import units as u #Imports the Astropy Library, This is done so that Poliastro can get valid 
+#time readings and so that we can change the lists to a valid form for the Porkchop plot to interpret
+from astropy.time import Time #Imports time from the Astropy module to use for Porkchop plot & Poliastro itself
  
-from poliastro.bodies import Earth, Mercury, Venus, Moon, Mars, Jupiter, Saturn, Uranus, Neptune
-from poliastro.plotting.porkchop import PorkchopPlotter
-from poliastro.util import time_range
+from poliastro.bodies import Earth, Mercury, Venus, Moon, Mars, Jupiter, Saturn, Uranus, Neptune #Imports list of planets for Porkchop planet targets
+from poliastro.plotting.porkchop import PorkchopPlotter #Imports functionality for Porkchop Plot
+from poliastro.util import time_range #Imports time range which is important for launch and arrival windows of Porkchop 
  
-import numpy as np 
-import webbrowser
+import numpy as np #Imports numpy library
+import webbrowser #Imports webbrowser so the program can access https weblinks for provider websites 
 
-import os 
+import os #
 
-################################################ BUTTON FUNCTIONS TO OPEN WEBSITES
-def ula_website_link():
-    webbrowser.open_new("https://www.ulalaunch.com/")
-def spacex_website_link():
-    webbrowser.open_new("https://www.spacex.com/")
-def northrup_grumman_website_link():
-    webbrowser.open_new("https://www.northropgrumman.com/")
-def ariane_space_website_link():
-    webbrowser.open_new("https://www.arianespace.com/")
-def rocket_lab_website_link():
-    webbrowser.open_new("https://www.rocketlabusa.com/")  
-def honeywell_website_link():
-    webbrowser.open_new("https://www.honeywell.com/us/en")
-def bae_systems_website_link():
-    webbrowser.open_new("https://www.baesystems.com/en/home")
-def lockheed_martin_website_link():
-    webbrowser.open_new("https://www.lockheedmartin.com/en-us/capabilities/space.html") 
-def boeing_website_link():
-    webbrowser.open_new("https://www.boeing.com/")
-def israeli_aerospace_website_link():
-    webbrowser.open_new("https://www.iai.co.il/")
+################################################ These functions are called when buttons for website links are 
+#Clicked, once executed webbrowser library will proceed to open the link on a default webbrowser for user.
+def ula_website_link(): #Function for ULA Website Link
+    webbrowser.open_new("https://www.ulalaunch.com/") #Line that takes user to said website link
+def spacex_website_link(): #Function for SpaceX Website Link
+    webbrowser.open_new("https://www.spacex.com/") #Line that takes user to said website link
+def northrup_grumman_website_link(): #Function for Northrup Grumman Website Link
+    webbrowser.open_new("https://www.northropgrumman.com/") #Line that takes user to said website link
+def ariane_space_website_link(): #Function for Ariane Space Website Link
+    webbrowser.open_new("https://www.arianespace.com/") #Line that takes user to said website link
+def rocket_lab_website_link(): #Function for Rocket Lab Website Link
+    webbrowser.open_new("https://www.rocketlabusa.com/") #Line that takes user to said website link 
+def honeywell_website_link(): #Function for Honeywell Website Link
+    webbrowser.open_new("https://www.honeywell.com/us/en") #Line that takes user to said website link
+def bae_systems_website_link(): #Function for BAE Systems Website Link
+    webbrowser.open_new("https://www.baesystems.com/en/home") #Line that takes user to said website link
+def lockheed_martin_website_link(): #Function for Lockheed Martin Website Link
+    webbrowser.open_new("https://www.lockheedmartin.com/en-us/capabilities/space.html") #Line that takes user to said website link
+def boeing_website_link(): #Function for Boeing Website Link 
+    webbrowser.open_new("https://www.boeing.com/") #Line that takes user to said website link
+def israeli_aerospace_website_link(): #Function for IAI Aerospace Website Link
+    webbrowser.open_new("https://www.iai.co.il/") #Line that takes user to said website link
  
-##########################################################################################
-def error_value_less_than():
-    value_less_than=tk.Tk()
-    value_less_than.geometry("300x150")
-    value_less_than.resizable(False, False)
-    value_less_than.configure(background="red")
+##################################################
+def error_value_less_than(): #Function that create an error pop up if the value of an Input is not equal or greater than one 
+    value_less_than=tk.Tk() #Creates the Tk Root 
+    value_less_than.geometry("300x150") #Sets the geometry and size of the window
+    value_less_than.resizable(False, False) #Line ensures user cannot resize window
+    value_less_than.configure(background="red") #Sets the background colour of the error message to red
 
     
-    error_warning = tk.Label(value_less_than, 
-                             text="PLEASE ENTER A VALUE EQUAL OR GREATER THAN 1", 
-                             anchor="center", wraplength=200, font=("Arial", 25))
-    error_warning.pack()
+    error_warning = tk.Label(value_less_than, #Label that displays the error message 
+                             text="PLEASE ENTER A VALUE EQUAL OR GREATER THAN 1", #Contents of the message
+                             anchor="center", wraplength=200, font=("Arial", 25)) #Visual settings of the message
+    error_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
-def error_value_error():
-    value_error=tk.Tk()
-    value_error.geometry("300x150")
-    value_error.resizable(False, False)
-    value_error.configure(background="red")
+def error_value_error(): #Function that creates an error pop up if an invalid input is detected such as a string
+    value_error=tk.Tk() #Creates the Tk Root 
+    value_error.geometry("300x150") #Sets the geometry and size of the window
+    value_error.resizable(False, False) #Line ensures user cannot resize window
+    value_error.configure(background="red") #Sets the background colour of the error message to red
     
-    value_error_warning = tk.Label(value_error, 
-                                   text="PLEASE ENTER A VALID INPUT (NUMBERS)", 
-                                   anchor="center", wraplength=150, font=("Arial", 25))
-    value_error_warning.pack()
+    value_error_warning = tk.Label(value_error, #Label that displays the error message 
+                                   text="PLEASE ENTER A VALID INPUT (NUMBERS)", #Contents of the message
+                                   anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    value_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
-def error_quantity_error():
-    quantity_error=tk.Tk()
-    quantity_error.geometry("300x150")
-    quantity_error.resizable(False, False)
-    quantity_error.configure(background="red")
+def error_quantity_error(): #Function that creates an error pop up if the quantity of numbers input is invalid
+    quantity_error=tk.Tk() #Creates the Tk Root
+    quantity_error.geometry("300x150") #Sets the geometry and size of the window
+    quantity_error.resizable(False, False) #Line ensures user cannot resize window
+    quantity_error.configure(background="red") #Sets the background colour of the error message to red
     
-    quantity_error_warning = tk.Label(quantity_error, 
-                                      text="PLEASE CHECK QUANTITIY OF INPUT NUMBERS", 
-                                      anchor="center", wraplength=150, font=("Arial", 25))
-    quantity_error_warning.pack()
+    quantity_error_warning = tk.Label(quantity_error,  #Label that displays the error message 
+                                      text="PLEASE CHECK QUANTITIY OF INPUT NUMBERS", #Contents of the message
+                                      anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    quantity_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
-def error_zero_error():
-    zero_error=tk.Tk()
-    zero_error.geometry("300x150")
-    zero_error.resizable(False, False)
-    zero_error.configure(background="red")
+def error_zero_error(): #Function that creates an error pop up if the digit 0 is detected in an input 
+    zero_error=tk.Tk() #Creates the Tk Root
+    zero_error.geometry("300x150") #Sets the geometry and size of the window
+    zero_error.resizable(False, False) #Line ensures user cannot resize window
+    zero_error.configure(background="red") #Sets the background colour of the error message to red
     
-    zero_error_warning = tk.Label(zero_error, 
-                                  text="ZERO (0) IS NOT A VALID INPUT", 
-                                  anchor="center", wraplength=150, font=("Arial", 25))
-    zero_error_warning.pack()
+    zero_error_warning = tk.Label(zero_error, #Label that displays the error message 
+                                  text="ZERO (0) IS NOT A VALID INPUT", #Contents of the message
+                                  anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    zero_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
-def error_date_error_month():
-    date_error_month=tk.Tk()
-    date_error_month.geometry("300x150")
-    date_error_month.resizable(False, False)
-    date_error_month.configure(background="red")
+def error_date_error_month(): #Function that creates an error pop up if the value of month variable exceeds 12 due to the fact you cannot have more than 12 months
+    date_error_month=tk.Tk() #Creates the Tk Root
+    date_error_month.geometry("300x150") #Sets the geometry and size of the window
+    date_error_month.resizable(False, False) #Line ensures user cannot resize window
+    date_error_month.configure(background="red") #Sets the background colour of the error message to red
     
-    date_error_month_warning = tk.Label(date_error_month, 
-                                        text="NUMBER OF MONTHS CANNOT EXCEED 12", 
-                                        anchor="center", wraplength=150, font=("Arial", 25))
-    date_error_month_warning.pack()
+    date_error_month_warning = tk.Label(date_error_month, #Label that displays the error message 
+                                        text="NUMBER OF MONTHS CANNOT EXCEED 12", #Contents of the message
+                                        anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    date_error_month_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
-def error_date_error_day():
-    date_error_day=tk.Tk()
-    date_error_day.geometry("300x150")
-    date_error_day.resizable(False, False)
-    date_error_day.configure(background="red")
+def error_date_error_day():# Function that creates an error pop up if the value of day variable exceeds 31 due to the fact you cannot have more than 31 days (in most cases)
+    date_error_day=tk.Tk() #Creates the Tk Root
+    date_error_day.geometry("300x150") #Sets the geometry and size of the window
+    date_error_day.resizable(False, False) #Line ensures user cannot resize window
+    date_error_day.configure(background="red") #Sets the background colour of the error message to red
     
-    date_error_day_warning = tk.Label(date_error_day, 
-                                      text="NUMBER OF DAYS CANNOT EXCEED 31", 
-                                      anchor="center", wraplength=150, font=("Arial", 25))
-    date_error_day_warning.pack()
+    date_error_day_warning = tk.Label(date_error_day, #Label that displays the error message 
+                                      text="NUMBER OF DAYS CANNOT EXCEED 31", #Contents of the message
+                                      anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    date_error_day_warning.pack() #Packs the error message and displays the contnets of the message to the user
     
     
 
-def launch_vehicle_process(vehicle_selection, launch_vehicle_tk):   
-    launch_vehicle_process_page = tk.Tk()
-    launch_vehicle_process_page.geometry("600x700")
-    launch_vehicle_process_page.resizable(False, False)
+def launch_vehicle_process(vehicle_selection, launch_vehicle_tk): #Function for executing display of images for the Launch Vehicles page 
+    launch_vehicle_process_page = tk.Tk() #Creates the Tk root for the page
+    launch_vehicle_process_page.geometry("600x700") #Sets the geometry and size of the window
+    launch_vehicle_process_page.resizable(False, False) #Line ensures user cannot resize window
     
-    homereturn = tk.Button(launch_vehicle_process_page, 
-                           text="Home", height=1, width=1, bd=1, 
-                           command=launch_vehicle_process_page.destroy)
-    homereturn.place(x=10, y=5)
+    homereturn = tk.Button(launch_vehicle_process_page, #Button for the user to be able to exit the image and return to previous page
+                           text="Home", height=1, width=1, bd=1, #Visual settings of the button
+                           command=launch_vehicle_process_page.destroy) #Button command to destroy Tk Root
+    homereturn.place(x=10, y=5) #Places the button in the top left of the page
     
-    if vehicle_selection.get() == "Falcon 9":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg")
-    elif vehicle_selection.get() == "Atlas V":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs25.jpeg")
-    elif vehicle_selection.get() == "Delta-IV":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs27a.jpeg")
-    elif vehicle_selection.get() == "Ariane V":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rl10.jpeg")
-    elif vehicle_selection.get() == "Vulcan":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/lr87.jpeg")
-    elif vehicle_selection.get() == "Antares":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs68a.jpeg")
-    elif vehicle_selection.get() == "Electron":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/f1.jpeg")
-    elif vehicle_selection.get() == "Peagasus XL":
-        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg")
+    if vehicle_selection.get() == "Falcon 9": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Atlas V": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs25.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Delta-IV": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs27a.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Ariane V": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rl10.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Vulcan": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/lr87.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Antares": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs68a.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Electron": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/f1.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Peagasus XL": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg") #Opens image if true
        
-    launch_vehicle_data_resized = launch_vehicle_data.resize((600,670))
-    img_launch_vehicle_data = ImageTk.PhotoImage(launch_vehicle_data_resized)
-    img_launch_vehicle_data_label = tk.Label(launch_vehicle_process_page, 
-                                             image = img_launch_vehicle_data, width=600, 
+    launch_vehicle_data_resized = launch_vehicle_data.resize((600,670)) #Takes image and resizes it
+    img_launch_vehicle_data = ImageTk.PhotoImage(launch_vehicle_data_resized) #Processes image into Tkinter Form
+    img_launch_vehicle_data_label = tk.Label(launch_vehicle_process_page, #Label proceeds to display image 
+                                             image = img_launch_vehicle_data, width=600,  #Image displayed
                                              height=670)
-    img_launch_vehicle_data_label.place(x=0, y=30)
+    img_launch_vehicle_data_label.place(x=0, y=30) #Image placed within the area of the page
     
-    launch_vehicle_process_page.mainloop()   
+    launch_vehicle_process_page.mainloop() #allows for continous user input & interaction to be recieved through its lifespan
     
 def rocket_engine_process(engine_selection, rocket_engine_page_tk):   
     rocket_engine_process_page = tk.Tk()
