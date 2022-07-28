@@ -1,0 +1,1660 @@
+import tkinter as tk  #Imports Tkinter Library
+from PIL import Image, ImageTk #Imports Pillow Library and changes the variable to be called by
+import PIL.Image #Imports Pillow Library 
+from tkinter import * #Imports Tkinter Library
+ 
+import math #Imports Math so simple calculations for Delta-V Calculator can be conducted
+ 
+from astropy import units as u #Imports the Astropy Library, This is done so that Poliastro can get valid 
+#time readings and so that we can change the lists to a valid form for the Porkchop plot to interpret
+from astropy.time import Time #Imports time from the Astropy module to use for Porkchop plot & Poliastro itself
+ 
+from poliastro.bodies import Earth, Mercury, Venus, Moon, Mars, Jupiter, Saturn, Uranus, Neptune #Imports list of planets for Porkchop planet targets
+from poliastro.plotting.porkchop import PorkchopPlotter #Imports functionality for Porkchop Plot
+from poliastro.util import time_range #Imports time range which is important for launch and arrival windows of Porkchop 
+ 
+import numpy as np #Imports numpy library
+import webbrowser #Imports webbrowser so the program can access https weblinks for provider websites 
+
+import os #
+
+################################################ These functions are called when buttons for website links are 
+#Clicked, once executed webbrowser library will proceed to open the link on a default webbrowser for user.
+def ula_website_link(): #Function for ULA Website Link
+    webbrowser.open_new("https://www.ulalaunch.com/") #Line that takes user to said website link
+def spacex_website_link(): #Function for SpaceX Website Link
+    webbrowser.open_new("https://www.spacex.com/") #Line that takes user to said website link
+def northrup_grumman_website_link(): #Function for Northrup Grumman Website Link
+    webbrowser.open_new("https://www.northropgrumman.com/") #Line that takes user to said website link
+def ariane_space_website_link(): #Function for Ariane Space Website Link
+    webbrowser.open_new("https://www.arianespace.com/") #Line that takes user to said website link
+def rocket_lab_website_link(): #Function for Rocket Lab Website Link
+    webbrowser.open_new("https://www.rocketlabusa.com/") #Line that takes user to said website link 
+def honeywell_website_link(): #Function for Honeywell Website Link
+    webbrowser.open_new("https://www.honeywell.com/us/en") #Line that takes user to said website link
+def bae_systems_website_link(): #Function for BAE Systems Website Link
+    webbrowser.open_new("https://www.baesystems.com/en/home") #Line that takes user to said website link
+def lockheed_martin_website_link(): #Function for Lockheed Martin Website Link
+    webbrowser.open_new("https://www.lockheedmartin.com/en-us/capabilities/space.html") #Line that takes user to said website link
+def boeing_website_link(): #Function for Boeing Website Link 
+    webbrowser.open_new("https://www.boeing.com/") #Line that takes user to said website link
+def israeli_aerospace_website_link(): #Function for IAI Aerospace Website Link
+    webbrowser.open_new("https://www.iai.co.il/") #Line that takes user to said website link
+def ula_website_link_confirm():    
+    ula_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    ula_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    ula_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    ula_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    ula_website_link_label = tk.Label(ula_website_link_confirm_tk, text="You will now be taken to 'www.ulalaunch.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    ula_website_link_label.place(x=65, y=5)
+    ula_website_link_confirm_button = tk.Button(ula_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=lambda: ula_website_link(ula_website_link_confirm_tk), font=('Arial 18'))
+    ula_website_link_confirm_button.place(x=65, y=150)
+    ula_website_link_reject_button = tk.Button(ula_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=ula_website_link_confirm_tk.destroy, font=('Arial 18'))
+    ula_website_link_reject_button.place(x=250, y=150)
+def spacex_website_link_confirm():    
+    spacex_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    spacex_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    spacex_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    spacex_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    spacex_website_link_label = tk.Label(spacex_website_link_confirm_tk, text="You will now be taken to 'www.spacex.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    spacex_website_link_label.place(x=65, y=5)
+    spacex_website_link_confirm_button = tk.Button(spacex_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=spacex_website_link, font=('Arial 18'))
+    spacex_website_link_confirm_button.place(x=65, y=150)
+    spacex_website_link_reject_button = tk.Button(spacex_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=spacex_website_link_confirm_tk.destroy, font=('Arial 18'))
+    spacex_website_link_reject_button.place(x=250, y=150)
+def northrop_grumman_website_link_confirm():    
+    northrop_grumman_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    northrop_grumman_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    northrop_grumman_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    northrop_grumman_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    northrop_grumman_website_link_label = tk.Label(northrop_grumman_website_link_confirm_tk, text="You will now be taken to 'www.northropgrumman.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    northrop_grumman_website_link_label.place(x=65, y=5)
+    northrop_grumman_website_link_confirm_button = tk.Button(northrop_grumman_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=northrup_grumman_website_link, font=('Arial 18'))
+    northrop_grumman_website_link_confirm_button.place(x=65, y=150)
+    northrop_grumman_website_link_reject_button = tk.Button(northrop_grumman_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=northrop_grumman_website_link_confirm_tk.destroy, font=('Arial 18'))
+    northrop_grumman_website_link_reject_button.place(x=250, y=150)
+def ariane_space_website_link_confirm():    
+    ariane_space_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    ariane_space_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    ariane_space_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    ariane_space_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    ariane_space_website_link_label = tk.Label(ariane_space_website_link_confirm_tk, text="You will now be taken to 'www.arianespace.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    ariane_space_website_link_label.place(x=65, y=5)
+    ariane_space_website_link_confirm_button = tk.Button(ariane_space_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=ariane_space_website_link, font=('Arial 18'))
+    ariane_space_website_link_confirm_button.place(x=65, y=150)
+    ariane_space_website_link_reject_button = tk.Button(ariane_space_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=ariane_space_website_link_confirm_tk.destroy, font=('Arial 18'))
+    ariane_space_website_link_reject_button.place(x=250, y=150)
+
+def rocket_lab_website_link_confirm():    
+    rocket_lab_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    rocket_lab_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    rocket_lab_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    rocket_lab_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    rocket_lab_website_link_label = tk.Label(rocket_lab_website_link_confirm_tk, text="You will now be taken to 'www.rocketlabusa.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    rocket_lab_website_link_label.place(x=65, y=5)
+    rocket_lab_website_link_confirm_button = tk.Button(rocket_lab_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=rocket_lab_website_link, font=('Arial 18'))
+    rocket_lab_website_link_confirm_button.place(x=65, y=150)
+    rocket_lab_website_link_reject_button = tk.Button(rocket_lab_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=rocket_lab_website_link_confirm_tk.destroy, font=('Arial 18'))
+    rocket_lab_website_link_reject_button.place(x=250, y=150)
+    
+def honeywell_website_link_confirm():    
+    honeywell_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    honeywell_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    honeywell_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    honeywell_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    honeywell_website_link_label = tk.Label(honeywell_website_link_confirm_tk, text="You will now be taken to 'www.honeywell.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    honeywell_website_link_label.place(x=65, y=5)
+    honeywell_website_link_confirm_button = tk.Button(honeywell_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=honeywell_website_link, font=('Arial 18'))
+    honeywell_website_link_confirm_button.place(x=65, y=150)
+    honeywell_website_link_reject_button = tk.Button(honeywell_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=honeywell_website_link_confirm_tk.destroy, font=('Arial 18'))
+    honeywell_website_link_reject_button.place(x=250, y=150)
+def bae_systems_website_link_confirm():    
+    bae_systems_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    bae_systems_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    bae_systems_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    bae_systems_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    bae_systems_website_link_label = tk.Label(bae_systems_website_link_confirm_tk, text="You will now be taken to 'www.baesystems.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    bae_systems_website_link_label.place(x=65, y=5)
+    bae_systems_website_link_confirm_button = tk.Button(bae_systems_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=bae_systems_website_link, font=('Arial 18'))
+    bae_systems_website_link_confirm_button.place(x=65, y=150)
+    bae_systems_website_link_reject_button = tk.Button(bae_systems_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=bae_systems_website_link_confirm_tk.destroy, font=('Arial 18'))
+    bae_systems_website_link_reject_button.place(x=250, y=150)
+def lockheed_martin_website_link_confirm():    
+    lockheed_martin_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    lockheed_martin_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    lockheed_martin_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    lockheed_martin_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    lockheed_martin_website_link_label = tk.Label(lockheed_martin_website_link_confirm_tk, text="You will now be taken to 'www.lockheedmartin.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    lockheed_martin_website_link_label.place(x=65, y=5)
+    lockheed_martin_website_link_confirm_button = tk.Button(lockheed_martin_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=lockheed_martin_website_link, font=('Arial 18'))
+    lockheed_martin_website_link_confirm_button.place(x=65, y=150)
+    lockheed_martin_website_link_reject_button = tk.Button(lockheed_martin_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=lockheed_martin_website_link_confirm_tk.destroy, font=('Arial 18'))
+    lockheed_martin_website_link_reject_button.place(x=250, y=150)
+def boeing_website_link_confirm():    
+    boeing_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    boeing_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    boeing_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    boeing_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    boeing_website_link_label = tk.Label(boeing_website_link_confirm_tk, text="You will now be taken to 'www.boeing.com'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    boeing_website_link_label.place(x=65, y=5)
+    boeing_website_link_confirm_button = tk.Button(boeing_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=boeing_website_link, font=('Arial 18'))
+    boeing_website_link_confirm_button.place(x=65, y=150)
+    boeing_website_link_reject_button = tk.Button(boeing_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=boeing_website_link_confirm_tk.destroy, font=('Arial 18'))
+    boeing_website_link_reject_button.place(x=250, y=150)
+def iai_website_link_confirm():    
+    iai_website_link_confirm_tk=tk.Tk() #Creates the Tk Root 
+    iai_website_link_confirm_tk.geometry("400x250") #Sets the geometry and size of the window
+    iai_website_link_confirm_tk.resizable(False, False) #Line ensures user cannot resize window
+    iai_website_link_confirm_tk.configure(background="#509be6") #Sets the background colour of the error message to red
+    iai_website_link_label = tk.Label(iai_website_link_confirm_tk, text="You will now be taken to 'www.iai.co.il'\n"
+                                       "Do you wish to continue?", width=30,height=5, bd=2, relief="solid", font=('Arial 16')
+                                       ,wraplength=200)
+    iai_website_link_label.place(x=65, y=5)
+    iai_website_link_confirm_button = tk.Button(iai_website_link_confirm_tk, text="Yes", height=3, width=5, bd=1,
+                                                command=israeli_aerospace_website_link, font=('Arial 18'))
+    iai_website_link_confirm_button.place(x=65, y=150)
+    iai_website_link_reject_button = tk.Button(iai_website_link_confirm_tk, text="No", height=3, width=5, bd=1,
+                                                command=iai_website_link_confirm_tk.destroy, font=('Arial 18'))
+    iai_website_link_reject_button.place(x=250, y=150)    
+##################################################
+def error_value_less_than(): #Function that create an error pop up if the value of an Input is not equal or greater than one 
+    value_less_than=tk.Tk() #Creates the Tk Root 
+    value_less_than.geometry("300x150") #Sets the geometry and size of the window
+    value_less_than.resizable(False, False) #Line ensures user cannot resize window
+    value_less_than.configure(background="red") #Sets the background colour of the error message to red
+
+    
+    error_warning = tk.Label(value_less_than, #Label that displays the error message 
+                             text="PLEASE ENTER A VALUE EQUAL OR GREATER THAN 1", #Contents of the message
+                             anchor="center", wraplength=200, font=("Arial", 25)) #Visual settings of the message
+    error_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+def error_value_error(): #Function that creates an error pop up if an invalid input is detected such as a string
+    value_error=tk.Tk() #Creates the Tk Root 
+    value_error.geometry("300x150") #Sets the geometry and size of the window
+    value_error.resizable(False, False) #Line ensures user cannot resize window
+    value_error.configure(background="red") #Sets the background colour of the error message to red
+    
+    value_error_warning = tk.Label(value_error, #Label that displays the error message 
+                                   text="PLEASE ENTER A VALID INPUT (NUMBERS)", #Contents of the message
+                                   anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    value_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+def error_quantity_error(): #Function that creates an error pop up if the quantity of numbers input is invalid
+    quantity_error=tk.Tk() #Creates the Tk Root
+    quantity_error.geometry("300x150") #Sets the geometry and size of the window
+    quantity_error.resizable(False, False) #Line ensures user cannot resize window
+    quantity_error.configure(background="red") #Sets the background colour of the error message to red
+    
+    quantity_error_warning = tk.Label(quantity_error,  #Label that displays the error message 
+                                      text="PLEASE CHECK QUANTITIY OF INPUT NUMBERS", #Contents of the message
+                                      anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    quantity_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+def error_zero_error(): #Function that creates an error pop up if the digit 0 is detected in an input 
+    zero_error=tk.Tk() #Creates the Tk Root
+    zero_error.geometry("300x150") #Sets the geometry and size of the window
+    zero_error.resizable(False, False) #Line ensures user cannot resize window
+    zero_error.configure(background="red") #Sets the background colour of the error message to red
+    
+    zero_error_warning = tk.Label(zero_error, #Label that displays the error message 
+                                  text="ZERO (0) IS NOT A VALID INPUT", #Contents of the message
+                                  anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    zero_error_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+def error_date_error_month(): #Function that creates an error pop up if the value of month variable exceeds 12 due to the fact you cannot have more than 12 months
+    date_error_month=tk.Tk() #Creates the Tk Root
+    date_error_month.geometry("300x150") #Sets the geometry and size of the window
+    date_error_month.resizable(False, False) #Line ensures user cannot resize window
+    date_error_month.configure(background="red") #Sets the background colour of the error message to red
+    
+    date_error_month_warning = tk.Label(date_error_month, #Label that displays the error message 
+                                        text="NUMBER OF MONTHS CANNOT EXCEED 12", #Contents of the message
+                                        anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    date_error_month_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+def error_date_error_day():# Function that creates an error pop up if the value of day variable exceeds 31 due to the fact you cannot have more than 31 days (in most cases)
+    date_error_day=tk.Tk() #Creates the Tk Root
+    date_error_day.geometry("300x150") #Sets the geometry and size of the window
+    date_error_day.resizable(False, False) #Line ensures user cannot resize window
+    date_error_day.configure(background="red") #Sets the background colour of the error message to red
+    
+    date_error_day_warning = tk.Label(date_error_day, #Label that displays the error message 
+                                      text="NUMBER OF DAYS CANNOT EXCEED 31", #Contents of the message
+                                      anchor="center", wraplength=150, font=("Arial", 25)) #Visual settings of the message
+    date_error_day_warning.pack() #Packs the error message and displays the contnets of the message to the user
+    
+    
+
+def launch_vehicle_process(vehicle_selection, launch_vehicle_tk): #Function for executing display of images for the Launch Vehicles page 
+    launch_vehicle_process_page = tk.Tk() #Creates the Tk root for the page
+    launch_vehicle_process_page.geometry("600x700") #Sets the geometry and size of the window
+    launch_vehicle_process_page.resizable(False, False) #Line ensures user cannot resize window
+    
+    homereturn = tk.Button(launch_vehicle_process_page, #Button for the user to be able to exit the image and return to previous page
+                           text="Home", height=1, width=1, bd=1, #Visual settings of the button
+                           command=launch_vehicle_process_page.destroy) #Button command to destroy Tk Root
+    homereturn.place(x=10, y=5) #Places the button in the top left of the page
+    
+    if vehicle_selection.get() == "Falcon 9": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Atlas V": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs25.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Delta-IV": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs27a.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Ariane V": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rl10.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Vulcan": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/lr87.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Antares": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rs68a.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Electron": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/f1.jpeg") #Opens image if true
+    elif vehicle_selection.get() == "Peagasus XL": #If statement gets result of dropdown menu 
+        launch_vehicle_data = PIL.Image.open("images/launch_vehicles/rd180.jpeg") #Opens image if true
+       
+    launch_vehicle_data_resized = launch_vehicle_data.resize((600,670)) #Takes image and resizes it
+    img_launch_vehicle_data = ImageTk.PhotoImage(launch_vehicle_data_resized) #Processes image into Tkinter Form
+    img_launch_vehicle_data_label = tk.Label(launch_vehicle_process_page, #Label proceeds to display image 
+                                             image = img_launch_vehicle_data, width=600,  #Image displayed
+                                             height=670)
+    img_launch_vehicle_data_label.place(x=0, y=30) #Image placed within the area of the page
+    
+    launch_vehicle_process_page.mainloop() #allows for continous user input & interaction to be recieved through its lifespan
+    
+def rocket_engine_process(engine_selection, rocket_engine_page_tk): #Function for executing the display of images for the Rocket Engines page
+    rocket_engine_process_page = tk.Tk() #Creates the Tk root for the page
+    rocket_engine_process_page.geometry("600x700") #Sets the geometry and size of the window
+    rocket_engine_process_page.resizable(False, False) #Line ensures user cannot resize window
+    
+    homereturn = tk.Button(rocket_engine_process_page, #Button for the user to be able to exit the image and return to previous page
+                           text="Home", height=1, width=1, bd=1, #Visual settings of the button
+                           command=rocket_engine_process_page.destroy) #Button command to destroy Tk Root
+    homereturn.place(x=10, y=5) #Places the button in the top left of the page 
+     
+    if engine_selection.get() == "RD-180": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rd180.jpeg") #Opens image if true
+    elif engine_selection.get() == "RD-191": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rd191.jpeg") #Opens image if true
+    elif engine_selection.get() == "RS-25": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rs25.jpeg") #Opens image if true
+    elif engine_selection.get() == "RS-68": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rs68a.jpeg") #Opens image if true
+    elif engine_selection.get() == "RS-27A": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rs27a.jpeg") #Opens image if true
+    elif engine_selection.get() == "RL-10": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/rl10.jpeg") #Opens image if true
+    elif engine_selection.get() == "LR-87": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/lr87.jpeg") #Opens image if true
+    elif engine_selection.get() == "AJ-10": #If statement gets result of dropdown menu 
+        rocket_engine_data = PIL.Image.open("images/rocket_engines/aj10.jpeg") #Opens image if true
+       
+    rocket_engine_data_resized = rocket_engine_data.resize((600,670)) #Takes Image and resizes it 
+    img_rocket_engine_data_resized = ImageTk.PhotoImage(rocket_engine_data_resized) #Processes image into Tkinter form
+    img_rocket_engine_data_label = tk.Label(rocket_engine_process_page, #Label proceeds to display image
+                                             image = img_rocket_engine_data_resized, width=600, #Image displayed
+                                             height=670)
+    img_rocket_engine_data_label.place(x=0, y=30) #Image placed within the area of the page
+    
+    rocket_engine_process_page.mainloop() #Allows for continous user input & interaction to be recieved through its lifespan
+    
+    
+    
+########################################################################################## Takes the inputs from the user from the Porkchop Plotter page, Processes them and then plots it.
+class porkchop_chart_process(): #Class that takes all the information and processes the Porkchop Plot 
+    def __init__(self, launch_window_year_inital, launch_window_month_inital, launch_window_day_inital, #Initalises the code
+                   launch_window_day_final, launch_window_month_final, launch_window_year_final, #List of all the variables passed in
+                   arrival_window_year_inital, arrival_window_month_inital, arrival_window_day_inital, #List of all the variables passed in
+                   arrival_window_year_final, arrival_window_month_final, arrival_window_day_final,  #List of all the variables passed in
+                   target_selection):
+        
+        self.launch_window_year_inital = launch_window_year_inital #Assigns variables passed in .self to comply with class
+        self.launch_window_month_inital = launch_window_month_inital #Assigns variables passed in .self to comply with class
+        self.launch_window_day_inital = launch_window_day_inital #Assigns variables passed in .self to comply with class
+        
+        self.launch_window_year_final = launch_window_year_final #Assigns variables passed in .self to comply with class
+        self.launch_window_month_final = launch_window_month_final #Assigns variables passed in .self to comply with class
+        self.launch_window_day_final = launch_window_day_final #Assigns variables passed in .self to comply with class
+        
+        self.arrival_window_year_inital = arrival_window_year_inital #Assigns variables passed in .self to comply with class
+        self.arrival_window_month_inital = arrival_window_month_inital #Assigns variables passed in .self to comply with class
+        self.arrival_window_day_inital = arrival_window_day_inital #Assigns variables passed in .self to comply with class
+        
+        self.arrival_window_year_final = arrival_window_year_final #Assigns variables passed in .self to comply with class
+        self.arrival_window_month_final = arrival_window_month_final #Assigns variables passed in .self to comply with class
+        self.arrival_window_day_final = arrival_window_day_final #Assigns variables passed in .self to comply with class
+        
+    
+        launch_start_list = [] #List for dates of inital launch dates to be appened to
+        launch_final_list = []  #List for dates of final launch dates to be appened to
+        arrival_start_list = [] #List for dates of inital arrival dates to be appened to
+        arrival_final_list = [] #List for dates of final arrival dates to be appened to
+       
+        ####################################################################### TESTING FOR USER INPUTTING NUMBER VALUES AND NOT LETTERS 
+        #################### LAUNCH WINDOW INITAL
+        try: 
+            int(self.launch_window_year_inital.get()) #Tries to get inital integer value for launch year
+        except ValueError: #Except for if it throws a value error 
+            error_value_error() #Exectue the function which throws an error warning for invald input 
+            return  #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.launch_window_month_inital.get()) #Tries to get inital integer value for launch month
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return  #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.launch_window_day_inital.get()) #Tries to get inital integer value for launch day
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        #################### LAUNCH WINDOW INITAL
+        #################### LAUNCH WINDOW FINAL
+        try: 
+            int(self.launch_window_year_final.get()) #Tries to get final integer value for launch year.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.launch_window_month_final.get()) #Tries to get final integer value for launch month.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.launch_window_day_final.get()) #Tries to get final integer value for launch day.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        #################### LAUNCH WINDOW FINAL
+        #################### ARRIVAL WINDOW INITAL
+        try: 
+            int(self.arrival_window_year_inital.get()) #Tries to get inital integer value for arrival year.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.arrival_window_month_inital.get()) #Tries to get inital integer value for arrival month.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.arrival_window_day_inital.get()) #Tries to get inital integer value for arrival day.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        #################### ARRIVAL WINDOW INITAL
+        #################### ARRIVAL WINDOW FINAL
+        try: 
+            int(self.arrival_window_year_final.get()) #Tries to get final integer value for arrival year.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.arrival_window_month_final.get()) #Tries to get final integer value for arrival month.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+        try: 
+            int(self.arrival_window_day_final.get()) #Tries to get final integer value for arrival day.
+        except ValueError: #Except for if it throws a value error
+            error_value_error()  #Exectue the function which throws an error warning for invald input 
+            return #Returns to stop the function and prevent further errors and issues 
+       #########################################
+       ######################################### CHECKING FOR INVALID INPUT OF 0 
+       ######################################### Launch Initial
+       
+        if int(self.launch_window_year_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input 
+       
+        if int(self.launch_window_month_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.launch_window_day_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       ######################################### Launch Initial
+       ######################################### Launch Final
+        if int(self.launch_window_year_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+           pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.launch_window_month_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.launch_window_day_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+        ######################################### Launch Final
+        ######################################### Arrival Inital
+        if int(self.arrival_window_year_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.arrival_window_month_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.arrival_window_day_inital.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       ########################################## Arrival Inital
+       ########################################## Arrival Final
+        if int(self.arrival_window_year_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.arrival_window_month_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       
+        if int(self.arrival_window_day_final.get()) == 0: #If statement checks if value equals to zero
+            error_zero_error() #If equal to zero execute error warning function to produce a pop up
+            return #Returns to stop the function and prevent further errors and issues 
+        else:  #Executes if value is percieved to not be zero
+            pass #Continues the function and program as normal due to it being an valid input
+       ########################################## Arrival Final
+       
+       ######################################### TESTING THE LENGTH TO SEE IF THEY ARE VALID 
+       ######################################## Launch Window Inital  
+        if len(self.launch_window_year_inital.get()) == 4: #Checks if string length is equal to 4 
+            pass #If value equal to 4 pass and the program continues normally
+        else: #If value not equal to four else executes
+            error_quantity_error() #Error warning informing user that the quantity of their input is invalid
+            return #Returns to stop function from executing 
+       
+        if 1 < len(self.launch_window_month_inital.get()) > 2: #Checks if length is outside boundary values
+            error_quantity_error() #If values outside boundary execute error warning function to produce a pop up
+            return #Returns to stop function from executing
+        else: #Executes if value within boundary
+            pass #Program continues as normal as input is valid
+       
+        if 1 < len(self.launch_window_day_inital.get()) > 2: #Checks if length is outside boundary values
+            error_quantity_error() #If values outside boundary execute error warning function to produce a pop up
+            return #Returns to stop function from executing
+        else:
+            pass #Program continues as normal as input is valid
+        ######################################## Launch Window Inital   
+        ########################## Launch Window Final
+        if len(self.launch_window_year_final.get()) == 4: #Checks if string length is equal to 4 
+            pass #If value equal to 4 pass and the program continues normally
+        else: #If value not equal to four else executes
+            error_quantity_error() #Error warning informing user that the quantity of their input is invalid
+            return #Returns to stop function from executing
+     
+        if 1 < len(self.launch_window_month_final.get()) > 2: #Boundary of less than 1 or greater than 2 checks if input is valid
+            error_quantity_error() #If values outside boundary execute error warning function to produce a pop up
+            return #Returns to stop function from executing
+        else: #Executes if value within boundary
+            pass #Program continues as normal as input is valid
+       
+        if 1 < len(self.launch_window_day_final.get()) > 2: #Boundary of less than 1 or greater than 2 checks if input is valid
+            error_quantity_error() #If values outside boundary execute error warning function to produce a pop up
+            return #Returns to stop function from executing
+        else: #Executes if value within boundary
+            pass #Program continues as normal as input is valid
+       ########################## Launch Window Final
+       ########################## Arrival Window Inital
+        if len(self.arrival_window_year_inital.get()) == 4: #Checks if string length is equal to 4 
+                pass #If value equal to 4 pass and the program continues normally
+        else: #If value not equal to four else executes
+            error_quantity_error() #Error warning informing user that the quantity of their input is invalid
+            return #Returns to stop function from executing
+     
+        if 1 < len(self.arrival_window_month_inital.get()) > 2: #Boundary of less than one or greater than 2 checks if input is valid
+            error_quantity_error() #If input is invalid executes error warning for invalid number of digits for months 
+            return #Returns to stop function from executing
+        else: #If value within boundary else executes
+            pass #Program continues as normal as input is valid
+       
+        if 1 < len(self.arrival_window_day_inital.get()) > 2: #Boundary of less than one or greater than 2 checks if input is valid
+            error_quantity_error() #If input is invalid executes error warning for invalid number of digits for months 
+            return #Returns to stop function from executing
+        else: #If value within boundary else executes
+            pass #Program continues as normal as input is valid
+       ####################ARRIVAL WINDOW Inital
+       ################################ ARRIVAL WINDOW FINAL
+        if len(self.arrival_window_year_final.get()) == 4: #Checks if string length is equal to 4 
+                pass #If value equal to 4 pass and the program continues normally
+        else: #Executes if input is not equal to 4 
+            error_quantity_error() #If length not equal to 4 executes quantitiy error warning pop up
+            return #Returns to stop function from executing
+     
+        if 1 < len(self.arrival_window_month_final.get()) > 2: #Boundary of less than one or greater than 2 checks if input is valid
+            error_quantity_error() #If input is invalid executes error warning for invalid number of digits for months 
+            return #Returns to stop function from executing
+        else: #If value within boundary else executes
+            pass #Program continues as normal as input is valid
+       
+        if 1 < len(self.arrival_window_day_final.get()) > 2: #Boundary of less than one or greater than 2 checks if input is valid
+            error_quantity_error() #If input is invalid executes error warning for invalid number of digits for days
+            return #Returns to stop function from executing
+        else: #If value within boundary else executes
+            pass #Program continues as normal as input is valid
+       ############################## ARRIVAL WINDOW FINAL
+       
+       ############################# TESTING FOR VALUES OF DAYS TO NOT EXCEED 31
+       ############################# Launch Window
+        if int(self.launch_window_day_inital.get()) > 31: #Checks if value is greater than 31
+            error_date_error_day() #Executes error message pop up for value of days 
+            return #Returns to stop function from executing
+        else: #If value less than 31
+            pass #Program continues as normal as input is valid
+        if int(self.launch_window_day_final.get()) > 31: #Checks if value is greater than 31
+            error_date_error_day() #Executes error message pop up for value of days 
+            return #Returns to stop function from executing
+        else: #If value less than 31
+            pass #Program continues as normal as input is valid
+       ############################# Launch Window
+       ############################# Arrival Window
+        if int(self.arrival_window_day_inital.get()) > 31: #Checks if value is greater than 31
+            error_date_error_day() #Executes error message pop up for value of days 
+            return #Returns to stop function from executing
+        else: #If value less than 31
+            pass #Program continues as normal as input is valid
+        if int(self.arrival_window_day_final.get()) > 31: #Checks if value is greater than 31
+            error_date_error_day() #Executes error message pop up for value of days 
+            return #Returns to stop function from executing
+        else: #If value less than 31
+            pass #Program continues as normal as input is valid
+       ############################# Arrival Window
+       
+       ############################# TESTING FOR VALUES OF MONTHS TO NOT EXCEED 12
+        if int(self.launch_window_month_inital.get()) > 12:  #Checks if value is greater than 12
+            error_date_error_month()  #Executes error message pop up for value of months
+            return #Returns to stop function from executing
+        else: #If vaue less than 12
+            pass #Program continues as normal as input is valid 
+        if int(self.launch_window_month_final.get()) > 12: #Checks if value is greater than 12
+            error_date_error_month() #Executes error message pop up for value of months
+            return #Returns to stop function from executing
+        else: #If vaue less than 12
+            pass #Program continues as normal as input is valid
+       ############################# Launch Window
+       ############################# Arrival Window
+        if int(self.arrival_window_month_inital.get()) > 12: #Checks if value is greater than 12
+            error_date_error_month() #Executes error message pop up for value of months
+            return #Returns to stop function from executing
+        else: #If vaue less than 12
+            pass #Program continues as normal as input is valid
+        if int(self.arrival_window_month_final.get()) > 12: #Checks if value is greater than 12
+            error_date_error_month() #Executes error message pop up for value of months
+            return #Returns to stop function from executing
+        else: #If vaue less than 12
+            pass #Program continues as normal as input is valid
+       ############################# Arrival Window
+   
+    
+       ###########################################################################
+        launch_window_year_inital_value = str(self.launch_window_year_inital.get()) #Gets value as string and assings it to new variable
+        launch_window_month_inital_value = str(self.launch_window_month_inital.get()) #Gets value as string and assings it to new variable
+        launch_window_day_inital_value = str(self.launch_window_day_inital.get()) #Gets value as string and assings it to new variable
+           
+        launch_window_year_final_value = str(self.launch_window_year_final.get()) #Gets value as string and assings it to new variable                               
+        launch_window_month_final_value = str(self.launch_window_month_final.get()) #Gets value as string and assings it to new variable
+        launch_window_day_final_value = str(self.launch_window_day_final.get()) #Gets value as string and assings it to new variable
+        
+        arrival_window_year_inital_value = str(self.arrival_window_year_inital.get()) #Gets value as string and assings it to new variable
+        arrival_window_month_inital_value = str(self.arrival_window_month_inital.get()) #Gets value as string and assings it to new variable
+        arrival_window_day_inital_value = str(self.arrival_window_day_inital.get()) #Gets value as string and assings it to new variable
+          
+        arrival_window_year_final_value = str(self.arrival_window_year_final.get()) #Gets value as string and assings it to new variable
+        arrival_window_month_final_value = str(self.arrival_window_month_final.get()) #Gets value as string and assings it to new variable
+        arrival_window_day_final_value = str(self.arrival_window_day_final.get()) #Gets value as string and assings it to new variable
+         
+        #Strings together all the values to form the values required for Poliastro time range
+        launch_start = str(launch_window_year_inital_value + "-" +launch_window_month_inital_value +  
+                           "-" +launch_window_day_inital_value) #Stitches together lauch_start_list 
+        launch_start_list.append(launch_start) #Appends to launch_start_list
+          
+        launch_final = str(launch_window_year_final_value + "-" + launch_window_month_final_value + 
+                           "-" + launch_window_day_final_value) #Stitches together lauch_final_list 
+        launch_final_list.append(launch_final) #Appends to launch_final_list
+         
+        arrival_start = str(arrival_window_year_inital_value + "-" + arrival_window_month_inital_value + 
+                            "-" + arrival_window_day_inital_value) #Stitches together arrival_start_list 
+        arrival_start_list.append(arrival_start) #Appends to arrival_start_list 
+          
+        arrival_final = str(arrival_window_year_final_value + "-" +  arrival_window_month_final_value + 
+                            "-" + arrival_window_day_final_value) #Stitches together arrival_final_list 
+        arrival_final_list.append(arrival_final) #Appends to arrival_final_list 
+        
+           #STRINGS IT ALL TOGETHER, COLLECTS AND STITCHES TOGETHER
+           ###########################################################################
+          
+        print(launch_start_list) #Prints List
+        print(launch_final_list) #Prints List
+        print(arrival_start_list) #Prints List
+        print(arrival_final_list) #Prints List
+          
+        launchinital = Time(launch_start_list, format='iso', scale='utc') #sets list to Astropy time value and assigns to new variable
+        launchfinal = Time(launch_final_list, format='iso', scale='utc') #sets list to Astropy time value and assigns to new variable
+        arrivalinital = Time(arrival_start_list, format='iso', scale='utc') #sets list to Astropy time value and assigns to new variable
+        arrivalfinal = Time(arrival_final_list, format='iso', scale='utc') #sets list to Astropy time value and assigns to new variable
+          
+        print("")
+        print(launchinital) #Prints new variables with time values 
+        print(launchfinal) #Prints new variables with time values 
+        print(arrivalinital) #Prints new variables with time values 
+        print(arrivalfinal) #Prints new variables with time values 
+        
+        target = None
+        print(target_selection) #prints the result of the dropdown menu selection of the user
+        if target_selection.get() == "Mercury": #Gets the result of the dropdown menu and checks if it matches
+            target = Mercury #If result matches then assign target variable planet value
+        elif target_selection.get() == "Venus": #Gets the result of the dropdown menu and checks if it matches
+            target = Venus #If result matches then assign target variable planet value
+        elif target_selection.get() == "Mars": #Gets the result of the dropdown menu and checks if it matches
+            target = Mars #If result matches then assign target variable planet value
+        elif target_selection.get() == "Jupiter": #Gets the result of the dropdown menu and checks if it matches
+            target = Jupiter #If result matches then assign target variable planet value
+        elif target_selection.get() == "Saturn": #Gets the result of the dropdown menu and checks if it matches
+            target = Saturn #If result matches then assign target variable planet value
+        elif target_selection.get() == "Uranus": #Gets the result of the dropdown menu and checks if it matches
+            target = Uranus #If result matches then assign target variable planet value
+        elif target_selection.get() == "Neptune": #Gets the result of the dropdown menu and checks if it matches
+            target = Neptune #If result matches then assign target variable planet value
+           
+            #Launch Window, Inital and Final Values
+        launch_span = time_range(launchinital, end= launchfinal) #Sets launch_span variable to poliastro time range values                   
+        arrival_span = time_range(arrivalinital, end= arrivalfinal) #Sets arrival_span variable to poliastro time range values 
+         
+        porkchop_plot = PorkchopPlotter(Earth, target, launch_span, arrival_span) #Poliastro code to tke in variables essential for plotting a porkchop plot
+        dv_dpt, dv_arr, c3dpt, c3arr, tof = porkchop_plot.porkchop() #Code executes and processes a porkchop plot
+   
+#BUTTON FUNCTIONS
+#######################################################################################################################
+class delta_v_calc_b: #Class that takes all of the inputs from the Delta_V Page and processes them into an output 
+    def __init__(self, wetmass_entry, drymass_entry, calc_output, isp_entry, isp_selection): #intialises the class
+        
+        self.wetmass_entry = wetmass_entry #Assigns variables passed in with .self to comply with class
+        self.drymass_entry = drymass_entry #Assigns variables passed in with .self to comply with class
+        self.calc_output = calc_output #Assigns variables passed in with .self to comply with class
+        self.isp_entry = isp_entry #Assigns variables passed in with .self to comply with class
+        self.isp_selection = isp_selection #Assigns variables passed in with .self to comply with class
+        
+        calc_output.delete("1.0","end") #Deletes the results box essentially clearing incase user reruns calculator
+        if self.isp_selection.get() == "ISP": #Checks dropdown menu input and executes if ISP
+            try:    #Try and except 
+                if int(self.wetmass_entry.get()) >= 1: #Checks if value of wetmass_entry is greater than 1
+                    wetmass_value = int(self.wetmass_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than() #Exectue less than error pop up
+            except ValueError: #Except for value error 
+                print("")
+                error_value_error() #Exectue value error pop up
+                
+            try:    #Try and except
+                if int(self.drymass_entry.get()) >= 1: #Checks if value of drymass_entry is greater than 1
+                    drymass_value = int(self.drymass_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than() #Exectue less than error pop up
+            except ValueError: #Except for value error 
+                print("")
+                error_value_error() #Exectue value error pop up
+              
+            try:    #Try and except     
+                if int(self.isp_entry.get()) >= 1: #Checks if value of isp_entry is greater than 1
+                    isp_value = int(self.isp_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than() #Exectue less than error pop up
+            except ValueError: #Except for value error 
+                print("")
+                error_value_error() #Exectue value error pop up
+            
+            try:    #Try and except
+                delta_calc_final = math.log(wetmass_value / drymass_value) * isp_value * 9.81 #Takes all the values and uses math library and produces delta v calculation
+                calc_output.insert('1.0', delta_calc_final) #inserts calculation into text box to be displayed to user
+            except UnboundLocalError: #executes if UnboundLocalError occours
+                print("")
+            
+       
+        elif self.isp_selection.get() == "Exhaust Velocity": #elif if user selects to do calculation in exhaust velocity not ISP 
+            try:    #Try and Except
+                if int(self.wetmass_entry.get()) >= 1: #Checks if value of wetmass_entry is greater than 1
+                    wetmass_value = int(self.wetmass_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than()  #Exectue less than error pop up
+            except ValueError: #Except for value error
+                print("")
+                error_value_error() #Exectue value error pop up
+            
+            try:    #Try and Except
+                if int(self.drymass_entry.get()) >= 1: #if greater than one int is assigned to new variable
+                    drymass_value = int(self.drymass_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than()  #Exectue less than error pop up
+            except ValueError: #Except for value error
+                print("")
+                error_value_error() #Exectue value error pop up
+            
+            try:    #Try and Except
+                if int(self.isp_entry.get()) >= 1: #if greater than one int is assigned to new variable
+                    isp_value = int(self.isp_entry.get()) #if greater than one int is assigned to new variable
+                else: #If value less than 1
+                    error_value_less_than()  #Exectue less than error pop up
+            except ValueError: #Except for value error
+                print("")
+                error_value_error() #Exectue value error pop up
+                    
+            try:    #Try and Except
+                delta_calc_final = math.log(wetmass_value / drymass_value) * isp_value #Calculates Delta-V with provided variables
+                calc_output.insert('1.0', delta_calc_final) #Inserts Delta-V Value into text box
+            except UnboundLocalError: #Except for UnboundLocalError 
+                print("")  
+            except ValueError: #Except for ValueError
+                print("")
+                error_value_error() #Executes ValueError pop up error message
+                    
+            try:    #Try and Except
+                delta_calc_final = math.log(wetmass_value / drymass_value) * isp_value
+                calc_output.insert('1.0', delta_calc_final)
+            except UnboundLocalError:
+                print("")
+        
+#######################################################################################################################  
+#BUTTON FUNCTIONS 
+def mainmenu_page(): #Function for the main menu page of the tkinter GUI 
+    mainmenu = tk.Tk() #Creates the TK root 
+    mainmenu.geometry("800x800") #Sets the geometry and page size
+    mainmenu.resizable(False, False) #Sets the page to not resizeable
+    mainmenu.configure(background="#509be6") #Sets the background colour of the page to specified clour
+    
+    #delta_v_tk.destroy()
+    #porkchop_tk.destroy()
+    #space_systems_tk.destroy()
+ 
+    title = tk.Label(text="Mission Planer, 1st Edition", borderwidth = 2, relief="solid", #Title of the mainmenu page
+                     height=3,width=23, font=('Arial 18')) #Height and width of label
+    title.place(x=30, y=15) #Title placement seettings
+ 
+    delta_v = tk.Button(text="Delta-V Calculator", borderwidth = 2, relief="solid",  #Button for Delta-V Page 
+                        height=6, width=25, command=lambda: delta_v_page(mainmenu)) #Height and Width settings also button command
+    delta_v.place(x=30, y=100) #Button placement settings
+ 
+    porkchop = tk.Button(text="Porkchop Chart Plotter", borderwidth = 2, relief="solid",  #Button for Porkchop Page
+                         height=6,width=25, command=lambda: porkchop_page(mainmenu)) #Height & Width settings also button command
+    porkchop.place(x=30, y=240) #Button placement settings
+
+    launchvehicle = tk.Button(text="Launch Vehicles", borderwidth = 2, relief="solid",  #Button for Porkchop Page
+                              height=6,width=25, command=lambda: launch_vehicle_page(mainmenu)) #Height & Width settings & button command
+    launchvehicle.place(x=30, y=380) #Button placement settings
+    
+    rocket_engines = tk.Button(text="Rocket Engines", borderwidth = 2, relief="solid", #Button for Rocket Engines Page 
+                             height=6,width=25, command=lambda: rocket_engine_page(mainmenu)) #Height & Width settings & Button command 
+    rocket_engines.place(x=30, y=520) #Button placement settings
+ 
+    space_systems = tk.Button(text="Space Systems", borderwidth = 2, relief="solid", #Button for Space Systems Page 
+                             height=6,width=25, command=lambda: space_systems_main_page(mainmenu)) #height & width & Button command
+    space_systems.place(x=30, y=660) #Button placement settings
+ 
+    news_frame = tk.Label(mainmenu, text=(""), #Label that forms the frame for the news section of the main menu
+                         width=35, height=47, fg="black", borderwidth = 2, relief="solid", #Details that form it 
+                         anchor="center", wraplength=300)
+    news_frame.place(x=450, y=15)  #News Frame placement 
+
+    news_frame_text = tk.Label(mainmenu, text=("This August Cassini completed one of its dives"  #News information 
+                                               " through Saturns rings as apart of the 'Grand Finale'"
+                                               " coined by NASA Jet Propulsion Laboratory officals."
+                                               " Officals hope this will help bring an insight into"
+                                               " how Saturns rings formed and what they are composed"
+                                               " of \n" 
+                                               "August 2017"), 
+                               width=28, height = 15, fg="black", anchor="center", wraplength=300, #Height & Width & Font size 
+                               font=('Arial 18'))
+    news_frame_text.place(x=455, y=420) #News Frame Text placement
+    
+    
+ 
+    news = tk.Label( text="News", width=35, height=5, fg="black", borderwidth = 2, relief="solid") #News title 
+    news.place(x=450, y=15) #News placement 
+  
+    cassini_home_page = PIL.Image.open("images/mainmenu/cassinihyugen.jpeg")   #Image of Cassini Hyugens orbiter 
+    cassini_home_page_resized = cassini_home_page.resize((305,300)) #Cassini Hyugens image resized 
+    img_cassini_home_page_resized = ImageTk.PhotoImage(cassini_home_page_resized) #Assigns it into ImageTk Form 
+    img_cassini_home_page_label = tk.Label(mainmenu, 
+                                             image = img_cassini_home_page_resized, width=305, #Places image into label 
+                                             height=300)
+    
+    img_cassini_home_page_label.place(x=455,y=105) #Image of Cassini Hyugens placed onto mainmenu
+ 
+    mainmenu.mainloop() #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+ 
+def delta_v_page(mainmenu): #Function for the page of the Delta-V Page 
+    delta_v_tk = tk.Tk() #creates the tk root for the page 
+    delta_v_tk.geometry("800x800") #Creates the pages geometry 
+    delta_v_tk.resizable(False, False) #sets the page to not be resizeable 
+    delta_v_tk.configure(background="#509be6") #Sets the pages background colour to set colour 
+    
+    mainmenu.destroy() #Destroys the mainmenu pages root destroying the page 
+
+    homereturn = tk.Button(delta_v_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'),
+                           command=mainmenu_page) #Home button which will open the main menu back up 
+    homereturn.place(x=10, y=5) #Home button placement 
+ 
+    delta_v_title = tk.Label(delta_v_tk, text="Rocket Equation Calculator Delta-V Calculator", #Label which titles the page
+                             borderwidth = 2, relief="solid", height=6,width=28, anchor="center", #Details & settings of label 
+                             wraplength=200)
+    delta_v_title.place(x=270, y=15) #Delta V Title placement
+    
+    error_warning_label = tk.Label(delta_v_tk, text="WARNING!\nDo not enter\nLetters, decimals and zero\nOtherwise errors will happen.", #Label which titles the page
+                             borderwidth = 2, relief="solid", height=5,width=28, anchor="center", #Details & settings of label 
+                             wraplength=200)
+    error_warning_label.place(x=270, y=130) #Delta V Title placement
+    
+ 
+    wetmass_title = tk.Label(delta_v_tk, text="Wet Mass (Kg)", bd = 2, relief="solid", font=('Arial 18')) #Label for Wet Mass 
+    wetmass_title.place(x=115, y=232) #Wet Mass label placement 
+ 
+    wetmass_entry = Entry(delta_v_tk, width=23, font=('Arial 18')) #Wet Mass entry
+    wetmass_entry.place(x=270, y=230) #Wet Mass entry placement 
+ 
+    drymass_title = tk.Label(delta_v_tk, text="Dry Mass (Kg)", bd = 2, relief="solid", font=('Arial 18')) #Dry mass title 
+    drymass_title.place(x=115, y=282) #Dry Mass label placement 
+    
+    drymass_entry = Entry(delta_v_tk, width=23, font=('Arial 18')) #Dry Mass entry 
+    drymass_entry.place(x=270, y=280) #Dry mass entry placement 
+ 
+    isp_options = ["ISP", "Exhaust Velocity"] #List for dropdown to take options from
+    isp_selection = StringVar(delta_v_tk) #Sets the root for the dropdown menu to Delta V pages root 
+    isp_selection.set(isp_options[0]) #Sets the first option of the dropdown menu to first item of the list 
+    isp_dropdown = OptionMenu(delta_v_tk, isp_selection, *isp_options) #Specifies dropdown menu, root & list of items 
+    isp_dropdown.place(x=115, y=332) #Drop down menu placement 
+    isp_entry = Entry(delta_v_tk, width=23, font=('Arial 18')) #ISP entry entry box
+    isp_entry.place(x=270, y=330) #ISP entry placement 
+                                                                                                                                 
+    deltav_calc = tk.Button(delta_v_tk, text="Calculate Delta-V", borderwidth = 3, relief="solid", #Button that executes the calculation
+                            height=2,width=25, wraplength=200,
+    command=lambda: delta_v_calc_b(wetmass_entry, drymass_entry, calc_output, isp_entry, isp_selection)) #Passes input variables to calculation class
+    deltav_calc.place(x=270,y=380) #delta v calculator button placement 
+ 
+    calc_output = Text(delta_v_tk, height = 2, width = 36) #Output box for end result AKA delta v calculation 
+    calc_output.place(x=270, y=440) #Calculation output placement 
+    
+    output_unit_title = tk.Label(delta_v_tk, text="Meters Per Second\n(MS^-1)",  #Label regarding unit of delta V 
+                                 bd=2, relief="solid", font=('Arial 14'))
+    output_unit_title.place(x=115, y=440) #output unit placement 
+    
+    delta_v_page_information_header = tk.Label(delta_v_tk,  #Delta V page information 
+    text=("The rocket equation was first forumulated by a Russian Scientist by the name of" #Text to fit within the box 
+          " Konstantin Tsiolkovsky. It is a mathmatical equation that allows for velocities"
+          " to be derived. The equation is based off the principles of momentum."
+          " In our case we can use it to calculate potential velocity of rockets or spacecraft.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 13, wraplength=230, font=('Arial 15'))
+    delta_v_page_information_header.place(x=20, y=520) #Delta V Information placement 
+    
+    delta_v_page_information = tk.Label(delta_v_tk,  #Delta V page information
+    text=("The rocket equation was first forumulated by a Russian Scientist by the name of" #Text to fit within the box 
+          " Konstantin Tsiolkovsky. It is a mathmatical equation that allows for velocities"
+          " to be derived. The equation is based off the principles of momentum."
+          " In our case we can use it to calculate potential velocity of rockets or spacecraft.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 13, wraplength=230, font=('Arial 15'))
+    delta_v_page_information.place(x=270, y=520) #Delta V Information placement 
+    
+    delta_v_page_information_2 = tk.Label(delta_v_tk, #Delta V page information
+    text=("The rocket equation was first forumulated by a Russian Scientist by the name of" #Text to fit within the box 
+          " Konstantin Tsiolkovsky. It is a mathmatical equation that allows for velocities"
+          " to be derived. The equation is based off the principles of momentum."
+          " In our case we can use it to calculate potential velocity of rockets or spacecraft.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 13, wraplength=230, font=('Arial 15'))
+    delta_v_page_information_2.place(x=520, y=520) #Delta V Information placement 
+
+ 
+    delta_v_tk.mainloop() #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+  
+def porkchop_page(mainmenu): #Function for the Porkchop Plotter Page 
+    porkchop_tk = tk.Tk() #Sets the Tk root for the page 
+    porkchop_tk.geometry("800x800") #Sets the page geometry, the size
+    porkchop_tk.resizable(False, False) #Sets the page that it cannot be resized
+    porkchop_tk.configure(background="#509be6") #Sets the page background to specified colour.
+    
+    mainmenu.destroy() #Destroys mainmenu page root so the page disappears 
+    
+    homereturn = tk.Button(porkchop_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'), 
+                           command=mainmenu_page) #Home page which opens the mainmenu
+    homereturn.place(x=10, y=5) #home button placement
+ 
+    porkchop_title = tk.Label(porkchop_tk, text="Porkchop Plot Plotter!", borderwidth = 2, #Title of the porkchop page 
+                              relief="solid", height=6,width=28, anchor="center", wraplength=200)
+    porkchop_title.place(x=270, y=15) #porkchop page title placement
+  
+    ###################################################################### Labels
+   
+    launch_window_label= tk.Label(porkchop_tk, text="Launch Window", bd = 2, relief="solid",  #Label for Launch Window
+                                  height=2,width=28, wraplength=200)
+    launch_window_label.place(x=270, y=135) #Launch Window Label placement
+   
+    arrival_window_label= tk.Label(porkchop_tk, text="Arrival Window", bd = 2, relief="solid", #Label for Arrival Window 
+                                   height=2,width=28, wraplength=200)
+    arrival_window_label.place(x=270, y=305) #Arrival Window Label placement 
+ 
+    inital_launch_label = tk.Label(porkchop_tk, text="Inital", bd=2, width=4, relief="solid", #Inital Launch Window Label
+                                   font=("Arial 14"))
+    inital_launch_label.place(x=225, y=215) #Inital Launch Window Label placement 
+   
+    final_launch_label = tk.Label(porkchop_tk, text="Final", bd=2, width=4, relief="solid", #Final Launch Window Label
+                                  font=("Arial 14"))
+    final_launch_label.place(x=225, y=265) #Final launch window label placement
+   
+    launch_window_day_label = tk.Label(porkchop_tk, text="Day", bd=2, width=4, relief="solid", #Launch Window Day Label
+                                       font=("Arial 14"))
+    launch_window_day_label.place(x=280, y=185) #Launch Window Day label placement
+   
+    launch_window_month_label = tk.Label(porkchop_tk, text="Month", bd=2, width=5, relief="solid", #Launch Window Month Label
+                                         font=("Arial 14"))
+    launch_window_month_label.place(x=377, y=185) #Launch Window Month Label  placement
+   
+    launch_window_year_label = tk.Label(porkchop_tk, text="Year", bd=2, width=4, relief="solid", #Launch Window year label
+                                        font=("Arial 14"))
+    launch_window_year_label.place(x=480, y=185) #launch window year label placement
+ 
+    inital_arrival_label = tk.Label(porkchop_tk, text="Inital", bd=2, width=4, relief="solid", #Initial arrival label
+                                    font=("Arial 14"))
+    inital_arrival_label.place(x=225, y=390) #Inital arrival label placement
+   
+    final_arrival_label = tk.Label(porkchop_tk, text="Final", bd=2, width=4, relief="solid", #Final arrival label
+                                   font=("Arial 14"))
+    final_arrival_label.place(x=225, y=440) #Final arrival label placement 
+   
+    arrival_window_day_label = tk.Label(porkchop_tk, text="Day", bd=2, width=4, relief="solid", #Arrival widnow day label
+                                        font=("Arial 14"))
+    arrival_window_day_label.place(x=280, y=360) #arrival window day label placement 
+   
+    arrival_window_month_label = tk.Label(porkchop_tk, text="Month", bd=2, width=5, relief="solid", #Arrival window month label
+                                          font=("Arial 14"))
+    arrival_window_month_label.place(x=377, y=360) #Arrival window month label placement 
+   
+    arrival_window_year_label = tk.Label(porkchop_tk, text="Year", bd=2, width=4, relief="solid", #Arrival window year label 
+                                         font=("Arial 14"))
+    arrival_window_year_label.place(x=485, y=360) #Arrival window year label placement 
+ 
+    ################################################################################### Launch Window Inputs
+    launch_window_day_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Launch window day inital entry box
+    launch_window_day_inital.place(x=270, y=210) #Launch window day inital entry box placement
+  
+    launch_window_month_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Launch window month inital entry box
+    launch_window_month_inital.place(x=370, y=210) #Launch window month inital entry box placement
+  
+    launch_window_year_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Launch window year inital entry box 
+    launch_window_year_inital.place(x=470, y=210) #Launch window year inital entry box placement
+   
+    launch_window_day_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #launch window day final entry box
+    launch_window_day_final.place(x=270, y=260) #launch window day final entry box placement 
+  
+    launch_window_month_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #Launch window month final entry box
+    launch_window_month_final.place(x=370, y=260) #Launch window month final entry box placement 
+  
+    launch_window_year_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #Launch window year final entry box
+    launch_window_year_final.place(x=470, y=260) #Launch window year final entry box placement 
+   
+    ##################################################################################### Arrival Window Input
+    arrival_window_day_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window day inital entry box
+    arrival_window_day_inital.place(x=270, y=390) #Arrival window day inital entry box placement 
+  
+    arrival_window_month_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window month inital entry box 
+    arrival_window_month_inital.place(x=370, y=390) #Arrival window month inital entry box placement 
+  
+    arrival_window_year_inital = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window year inital entry box
+    arrival_window_year_inital.place(x=470, y=390) #Arrival window year inital entry box placement 
+   
+    arrival_window_day_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window day final entry box
+    arrival_window_day_final.place(x=270, y=440) #Arrival window day final entry box placement 
+  
+    arrival_window_month_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window month final entry box
+    arrival_window_month_final.place(x=370, y=440) #Arrival window month final entry box placement
+  
+    arrival_window_year_final = Entry(porkchop_tk, width=6, font=("Arial 14")) #Arrival window year final entry box 
+    arrival_window_year_final.place(x=470, y=440) #Arrival window year final entry box 
+    #####################################################################################
+   
+    planet_options = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"] #List of planets for user to select in dropdown menu
+    target_selection = StringVar(porkchop_tk)
+    target_selection.set(planet_options[2]) #Sets inital dropdown selection to Mars 
+    target_dropdown = OptionMenu(porkchop_tk, target_selection, *planet_options) #Drop down menu for planet selection
+    target_dropdown.place(x=370, y=480) #Dropdown menu for planet selecton placement
+   
+    porkchop_plot_button = tk.Button(porkchop_tk, text="Plot Porkchop Graph", width=25, height=2, #Button to pass data to porkchop plot process class
+                                     bd = 2, command=lambda: porkchop_chart_process(launch_window_year_inital, #command that executes Porkchop Processing class
+                                    launch_window_month_inital, launch_window_day_inital,
+                   launch_window_day_final, launch_window_month_final, launch_window_year_final,
+                   arrival_window_year_inital, arrival_window_month_inital, arrival_window_day_inital,
+                   arrival_window_year_final, arrival_window_month_final, arrival_window_day_final, 
+                   target_selection))
+   
+    porkchop_plot_button.place(x=270, y=520) #placement of porkchop button
+    
+    porkchop_plot_label = tk.Label(porkchop_tk, text="Planet Selection", bd=2, width=14, height=2, #Label for planet selection
+                                   relief="solid", font=("Arial 14"))
+    porkchop_plot_label.place(x=235, y=475) #Planet selection label placement
+   
+    porkchop_page_information_meaning = tk.Label(porkchop_tk, #Porkchop meaning information label 
+    text=("What is a Porkchop Plot?"
+          " A Porkchop Plot is a plot that is used by engineers to determine when it is the most"
+          " efficent time to launch a spacecraft to a certain planet. This is commonly known as a"
+          " Launch Window. Porkchop Plots have different colours to represent the different energy"
+          " requirements a rocket would need to produce to make a succesful transfer towards that planet."
+          " ")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 12, wraplength=230, font=('Arial 15'))
+    porkchop_page_information_meaning.place(x=20, y=570) #Porkchop meaning information label placement  
+    
+    porkchop_page_information_keys = tk.Label(porkchop_tk, #Porkchop keys information label 
+    text=("Yellow colours show a time when more energy is required. While deeper the blue the" 
+          " more energy efficent the time it is to launch!"
+          " Porkchop Plots compare between the time of launch and the time of arrival."
+          " Engineers sometimes look for launch windows. This is why there is an inital and"
+          " a final date for both Launch Window and Arrival Window.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 12, wraplength=230, font=('Arial 15'))
+    porkchop_page_information_keys.place(x=270, y=570) #Porkchop keys information label placement
+    
+    porkchop_page_information_operations = tk.Label(porkchop_tk,  #Porkchop operations information label
+    text=("To develop a Porkchop Plot firsty input dates for both Launch and Arrival windows."
+          " Select your target planet. Then press 'Plot that Porkchop'."
+          " Due to the limitations of Python and Tkinter the entire program has to be closed"
+          " to get a resultant plot. An example of a launch window to try for Mars is" 
+          " Sept-Dec 2011 to Jun-Sept 2012.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 12, wraplength=230, font=('Arial 15'))
+    porkchop_page_information_operations.place(x=520, y=570) #Porkchop operations information label placement
+    
+    porkchop_tk.mainloop() #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+ 
+def launch_vehicle_page(mainmenu): #Function for launch vehicles page 
+    launch_vehicle_tk = tk.Tk() #Creates the Tk Root for launch vehicles page 
+    launch_vehicle_tk.geometry("800x800") #Sets the size and geometry of the page
+    launch_vehicle_tk.resizable(False, False) #Sets the page to not being resizeable 
+    launch_vehicle_tk.configure(background="#509be6") #Sets the background colour to specified colour 
+    
+    
+    mainmenu.destroy() #Destroys the mainmenu root destroying the page. 
+    
+    homereturn = tk.Button(launch_vehicle_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'), 
+                           command=mainmenu_page) #Home button that opens main menu
+    homereturn.place(x=10, y=5) #Home button placement 
+ 
+    launch_vehicle_title = tk.Label(launch_vehicle_tk, text="Launch Vehicles", borderwidth = 2, #Launch Vehicles title label
+                                    relief="solid", height=6,width=28, anchor="center", wraplength=200)
+    launch_vehicle_title.place(x=270, y=15) #Launch vehicles title label placement
+    
+    launch_vehicle_options = ["Falcon 9", "Atlas V", "Delta-IV", "Ariane V", "Vulcan", "Antares", #List containing options of different launch vehicles to look at.
+                              "Electron", "Pegasus XL"]
+    vehicle_selection = StringVar(launch_vehicle_tk) 
+    vehicle_selection.set(launch_vehicle_options[0]) #Sets the first optio for the drop down menu to first item in the list 
+    vehicle_dropdown = OptionMenu(launch_vehicle_tk, vehicle_selection, *launch_vehicle_options) #Dropdown menu is specified 
+    vehicle_dropdown.place(x=350, y=200) #Drop down menu placement 
+    
+    launch_vehicle_data_show = tk.Button(launch_vehicle_tk, text="Show Launch Vehicle Data", #Launch Vehicle Show Data button 
+                                         width=25, height=4, bd = 2, 
+                                         command=lambda: launch_vehicle_process(vehicle_selection, #Executes function to open selected launch vehicle 
+                                                                                launch_vehicle_tk))
+    launch_vehicle_data_show.place(x=270, y=280) #Launch Vehicle show data button placement 
+    
+    launch_vehicle_page_information_header = tk.Label(launch_vehicle_tk, #Launch Vehice Page information header label
+    text=("This page contains information regarding numerous launch vehicles."
+          " To access the data select a vehicle from the drop down menu and then click "
+          "the 'Show launch vehicle Data' button. The page shows a variety of information."
+          " From payload capacity to flight faliure rates.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=250, font=('Arial 18'))
+    launch_vehicle_page_information_header.place(x=50, y=420) #Launch vehicle page information header label
+    
+    launch_vehicle_page_information_interpret = tk.Label(launch_vehicle_tk, #Launch vehicle page information interpret label
+    text=("How do we interpret this data?\n"
+          " \nPayload Capacity: This is the total mass the launch vehicle can lift into a specific orbit."
+          " \nLaunch Success: Simple percentage of Success to Failed launches."
+          " \nUser Friendliness: A rating of what class of customer should fly.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=250, font=('Arial 18'))
+    launch_vehicle_page_information_interpret.place(x=430, y=420) #Launch vehicle page information interpret label placement 
+    
+    
+    label_vehicle_dropdown = tk.Label(launch_vehicle_tk, text="Dropdown Menu", #Drop downmenu label
+                                      relief = "solid", anchor = "center", bd = 2,
+                                      width = 13, height = 3, wraplength=200)
+    label_vehicle_dropdown.place(x=190, y=180) #Drop downmenu label placement 
+    
+    
+    launch_vehicle_tk.mainloop()  #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+    
+def rocket_engine_page(mainmenu): #Function for the Rocket Engine page 
+    rocket_engine_page_tk = tk.Tk() #Creates the Tk Root for the Rocket Engine page 
+    rocket_engine_page_tk.geometry("800x800") #Sets the geometry and size of the page 
+    rocket_engine_page_tk.resizable(False, False)  #Sets the page to be non resizable 
+    rocket_engine_page_tk.configure(background="#509be6") #Sets the background colour to specified colour
+
+    
+    mainmenu.destroy() #Destroys the mainmenu root destroying the main menu page 
+    
+    homereturn = tk.Button(rocket_engine_page_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'), #home button
+                           command=mainmenu_page)
+    homereturn.place(x=10, y=5) #home button placement 
+    
+    rocket_engines_title = tk.Label(rocket_engine_page_tk, text="Rocket Engines", #Rocket engines title label
+                                   borderwidth = 2, relief="solid", height=6,width=28, anchor="center",
+                                   wraplength=200)
+    rocket_engines_title.place(x=270, y=15) #Rocket engine title label placement 
+    
+    rocket_engine_options = ["RD-180", "RD-191", "RS-25", "RS-68", "RS-27A", "RL-10", "LR-87", #List of different Rocket Engines 
+                              "AJ-10"]
+    engine_selection = StringVar(rocket_engine_page_tk)
+    engine_selection.set(rocket_engine_options[0]) #Sets the dropdown menu to the first item in the list 
+    engine_dropdown = OptionMenu(rocket_engine_page_tk, engine_selection, *rocket_engine_options) #Engine drop down menu is specified 
+    engine_dropdown.place(x=350, y=200) #Engine drop down menu placement 
+    
+    rocket_engine_data_show = tk.Button(rocket_engine_page_tk, text="Show Engine Data",  #Rocket engine show data button 
+                                         width=25, height=4, bd = 2, 
+                                         command=lambda: rocket_engine_process(engine_selection, #command that executes and shows engine data
+                                                                                rocket_engine_page_tk))
+    rocket_engine_data_show.place(x=270, y=280) #Rocket engine data show placement 
+    
+    rocket_engine_page_information = tk.Label(rocket_engine_page_tk,  #Rocket engine page information label
+    text=("This page contains information regarding numerous rocket engines."
+          " To access the data select a rocket engine from the drop down menu and then click "
+          "the 'Show Rocket Engine Data' button. The page shows a variety of information."
+          " Including thrust, chmaber pressure and Impulse.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=250, font=('Arial 18'))
+    rocket_engine_page_information.place(x=50, y=420) #Rocket engine page information label placement 
+    
+    rocket_engine_page_information_interpret = tk.Label(rocket_engine_page_tk, #Rocket engine page information interpret label 
+    text=("How do we interpret this data?\n"
+          " \nThrust: This is the total mass the launch vehicle can lift into a specific orbit."
+          " \nISP: The higher the value the more efficent an engine is."
+          " \nChamber Pressure: Pressure the engine is operating at."
+          " \nMixture Ratio: Mixture ratio of the fuels used by the engine.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=300, font=('Arial 18'))
+    rocket_engine_page_information_interpret.place(x=430, y=420) #Rocket engine page information interpret label placement 
+    
+    label_engine_dropdown = tk.Label(rocket_engine_page_tk, text="Dropdown Menu", #Drop downmenu label
+                                      relief = "solid", anchor = "center", bd = 2,
+                                      width = 13, height = 3, wraplength=200)
+    label_engine_dropdown.place(x=190, y=180) #Drop downmenu label placement 
+    
+
+def space_systems_main_page(mainmenu): #Function for the Space Systems main menu page 
+    space_systems_tk = tk.Tk() #Creates the Tk Root for the Space Systems main menu page 
+    space_systems_tk.geometry("800x800") #Sets the size and geometry of the page
+    space_systems_tk.resizable(False, False) #Sets the page to be non resizeable 
+    space_systems_tk.configure(background='#509be6') #Sets the background colour to specified colour 
+    
+    mainmenu.destroy() #Destroys the mainmenu root destroying the main menu page. 
+    
+    homereturn = tk.Button(space_systems_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'), #Home button 
+                           command=mainmenu_page)
+    homereturn.place(x=10, y=5) #Home button placement 
+ 
+    space_systems_title = tk.Label(space_systems_tk, text="Space System Providers",  #Space Systems title label
+                                   borderwidth = 2, relief="solid", height=6,width=28, anchor="center",
+                                   wraplength=200)
+    space_systems_title.place(x=270, y=15) #Space systems title label placement 
+    
+    space_systems_what_is_this = tk.Label(space_systems_tk,  #Launch System Providers Information Label 
+    text=("What is Space Systems?\nThis page is dedicated to providing a wide range of different\n"
+          "aerospace companies who are able to provide high quality specalist products and services.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 7, wraplength=230, font=('Arial 16'))
+    space_systems_what_is_this.place(x=270, y=130) #Launch System Providers Information Label placement 
+
+   
+    launch_system_providers = tk.Button(space_systems_tk, text="Launch System Providers",  #Launch System Providers label
+                                        anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                        wraplength=200, font=('Arial 16'),
+                                        command=launch_system_providers_page)
+    launch_system_providers.place(x=40, y=300) #Launch System Providers label Placement 
+   
+    satellite_service_providers = tk.Button(space_systems_tk, text="Satellite Service Providers", #Satellite Service Providers label 
+                                        anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                        wraplength=200, font=('Arial 16'), 
+                                        command=satellite_service_providers_page) 
+    satellite_service_providers.place(x=290, y=300)
+   
+    satellite_parts_service_providers = tk.Button(space_systems_tk, text="Satellite Parts Service Providers", 
+                                         anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                         wraplength=200, font=('Arial 16'), 
+                                         command=satellite_parts_service_providers_page)
+    satellite_parts_service_providers.place(x=540, y=300) #Satellite Service Providers Label Placement 
+    
+    launch_system_providers_information = tk.Label(space_systems_tk,  #Launch System Providers Information Label 
+    text=("Launch System Providers are companies that offer a range."
+          " of different launch vehicles and systems to carry payloads."
+          " to Earths orbit and beyond."
+          " The selection of companies are succesful and operational.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
+    launch_system_providers_information.place(x=20, y=420) #Launch System Providers Information Label placement 
+    
+    satellite_service_providers_information = tk.Label(space_systems_tk, #Satellite Service providers Information Label
+    text=("Satellite Service Providers provide services in the form of different"
+          " satellite buses that can be used to carry payloads and instruments that are crtitical"
+          " to the mission. These companies have numerous launches under their belt."
+          " They are also Industry specalists")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
+    satellite_service_providers_information.place(x=270, y=420) #Satellite Service providers Information Label placement 
+    
+    satellite_parts_service_providers_information = tk.Label(space_systems_tk,  #satellite parts service providers information label
+    text=("Satellite Part Providers provide services in the form of different"
+          " satellite parts. Parts range from Electrical Devices, Communications, "
+          " and Remote Sensing sensors. All companies are industry specialists"
+          " with their products tried and tested in numerous space missions.")
+    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=230, font=('Arial 16'))
+    satellite_parts_service_providers_information.place(x=520, y=420) #Satellite parts service providers information label placement 
+    
+      
+    space_systems_tk.mainloop() #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+    
+def launch_system_providers_page(): #Function for the Launch System Providers Page 
+    launch_system_providers_tk = tk.Tk() #Creates the Tk root for the Launch System Providers page
+    launch_system_providers_tk.geometry("800x800") #Sets and specifies the geometry and size of the page 
+    launch_system_providers_tk.resizable(False, False) #Sets the page to be non resizeable 
+    launch_system_providers_tk.configure(background="#509be6") #Sets the background colour to the specified colour 
+
+        
+    homereturn = tk.Button(launch_system_providers_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'),  #Home button 
+                           command=launch_system_providers_tk.destroy)
+    homereturn.place(x=10, y=5) #Home button placement 
+   
+    launch_system_providers_title = tk.Label(launch_system_providers_tk, text="Launch System Providers", #Launch System Providers Label
+                                             borderwidth = 2, relief="solid", height=6,width=28, 
+                                             anchor="center", wraplength=200)
+    launch_system_providers_title.place(x=270, y=15) #Launch System Providers Label Placement 
+   
+    united_launch_button = tk.Button(launch_system_providers_tk, text="United Launch Alliance Website",  #ULA Website Link Button
+                                     anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                     wraplength=200, command=ula_website_link_confirm)
+    united_launch_button.place(x=350, y=180) #ULA Website Link Button Placement 
+   
+    spacex_button = tk.Button(launch_system_providers_tk, text="SpaceX Website", anchor="center", #SpaceX Website Link Button
+                                     relief="solid", height=4, width=20, bd = 2, 
+                                     wraplength=200, command=spacex_website_link_confirm) 
+    spacex_button.place(x=350, y=300) #SpaceX Webstie Link Button Placement 
+   
+    northrop_grumman_button = tk.Button(launch_system_providers_tk, text="Northrup Grumman Website", #Norhtrup Grumman Website Link Button
+                                        anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                        wraplength=200, command=northrop_grumman_website_link_confirm)
+    northrop_grumman_button.place(x=350, y=420) #Norhtrup Grumman Website Link Button 
+   
+    ariane_space_button = tk.Button(launch_system_providers_tk, text="Ariane Space Website", #Ariane Space Website Link Button
+                                    anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                    wraplength=200, command=ariane_space_website_link_confirm)
+    ariane_space_button.place(x=350, y=540) #Ariane Space Website Link Button Placement 
+   
+    rocket_lab_button = tk.Button(launch_system_providers_tk, text="Rocket Lab Website", #Rocket Lab Website Link Button 
+                                  anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                  wraplength=200, command=rocket_lab_website_link_confirm)
+    rocket_lab_button.place(x=350, y=660) #Rocket Lab Website Link Button Placement 
+   
+    ########################################
+    ######################################## Labels
+    lift_capability_label = tk.Label(launch_system_providers_tk, text="Lift Capability\nof Launch Vehicles" #Lift Capability Label
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    lift_capability_label.place(x=600, y=80) #Lift Capabiltity Label Placement 
+    
+    company_logo_label_launch = tk.Label(launch_system_providers_tk, text="Company Logos" #Lift Capability Label
+                                     , borderwidth = 2, 
+                         relief="solid", height=2,width=15, anchor="center", wraplength=200)
+    company_logo_label_launch.place(x=100, y=110) #Lift Capabiltity Label Placement 
+    
+    
+    ula_label = tk.Label(launch_system_providers_tk, text="Medium to Heavy Lift", borderwidth = 2, #ULA Lift Capability Label
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    ula_label.place(x=600, y=180) #ULA Lift capability label placement 
+   
+    spacex_label = tk.Label(launch_system_providers_tk, text="Medium to Heavy Lift", borderwidth = 2,  #SpaceX lift capability Label
+                            relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    spacex_label.place(x=600, y=300) #SpaceX lift capability label placement 
+   
+    northrup_grumman_label = tk.Label(launch_system_providers_tk, text="Medium Lift", borderwidth = 2,  #Norhtrup Grumman Lift capability label
+                                      relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    northrup_grumman_label.place(x=600, y=420) #Norhtrup Grumman Lift Capability label placement 
+   
+    ariane_space_label = tk.Label(launch_system_providers_tk, text="Light to Heavy Lift", borderwidth = 2, #Ariane Space Lift Capability Label
+                                  relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    ariane_space_label.place(x=600, y=540) #Ariane Space Lift Capability Label placement 
+   
+    rocket_lab_label = tk.Label(launch_system_providers_tk, text="Light Lift", borderwidth = 2, #Rocket Lab lift capability label
+                                relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    rocket_lab_label.place(x=600, y=660) #Rocket Lab Lift capability label placement 
+    
+    #################################### Images
+    
+    united_launch_logo = PIL.Image.open("images/launchservices/ULA_logo.jpeg") #ULA Image open
+    united_launch_resized = united_launch_logo.resize((300,100)) #ULA Image resized
+    img_united_launch = ImageTk.PhotoImage(united_launch_resized) #ULA Image variable assigned 
+    img_united_launch_label = tk.Label(launch_system_providers_tk, image = img_united_launch, #ULA Image Label 
+                                       width=300, height=100)
+    img_united_launch_label.place(x=25, y=165) #ULA Image Label placement 
+    
+    spacex_logo = PIL.Image.open("images/launchservices/spacex_logo.jpeg") #SpaceX Image Open
+    spacex_resized = spacex_logo.resize((300,100)) #SpaceX Image resized
+    img_spacex = ImageTk.PhotoImage(spacex_resized) #SpaceX Image variable assigned 
+    img_spacex_label = tk.Label(launch_system_providers_tk, image = img_spacex, width=300, height=100) #SpaceX image label
+    img_spacex_label.place(x=25, y=285) #SpaceX Image Label Placement 
+    
+    northrup_grumman_logo = PIL.Image.open("images/launchservices/northrop_grumman.jpeg") #Northrup Grumman Image Open 
+    northrup_grumman_resized = northrup_grumman_logo.resize((300,100)) #Northrup Grumman Image Resized  
+    img_northrup_grumman = ImageTk.PhotoImage(northrup_grumman_resized) #Norhtrup Image variable assigned 
+    img_northrup_grumman_label = tk.Label(launch_system_providers_tk, image = img_northrup_grumman, #Norhtrup Grumman Image label
+                                          width=300, height=100) 
+    img_northrup_grumman_label.place(x=25, y=405) #Northrup grumman image label placement 
+    
+    ariane_space_logo = PIL.Image.open("images/launchservices/ariane_space.jpeg") #Ariane Space Image Open
+    ariane_space_resized = ariane_space_logo.resize((300,100)) #Ariane Space Image Resized
+    img_ariane_space = ImageTk.PhotoImage(ariane_space_resized) #Ariane Space Image variable assigned
+    img_ariane_space_logo = tk.Label(launch_system_providers_tk, image = img_ariane_space, #Ariane Space Image Label
+                                     width=300, height=100)
+    img_ariane_space_logo.place(x=25, y=525) #Ariane Space Image Label Placement 
+    
+    rocketlab_logo = PIL.Image.open("images/launchservices/rklb.jpeg") #Rocket Lab Image open 
+    rocketlab_resized = rocketlab_logo.resize((300,100)) #Rocket Lab Image Resized 
+    img_rocketlab = ImageTk.PhotoImage(rocketlab_resized) #Rocket Lab Image variable assigned
+    img_rocketlab_label = tk.Label(launch_system_providers_tk, image = img_rocketlab, #Rocket Lab space image Label
+                                   width=300, height=100)
+    img_rocketlab_label.place(x=25, y=645) #Rocket Lab Image Label Placement 
+    
+    launch_system_providers_tk.mainloop() #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+ 
+   
+def satellite_service_providers_page(): #Function of satellite service provider page
+    satellite_service_providers_tk = tk.Tk() #Creates the tk root of the satellite service provider page 
+    satellite_service_providers_tk.geometry("800x800") #Sets and specifies the geometry and size of the page
+    satellite_service_providers_tk.resizable(False, False) #Sets the page to be non resizeable 
+    satellite_service_providers_tk.configure(background="#509be6") #Sets the background colour of the page to specified colour
+
+    
+    
+    homereturn = tk.Button(satellite_service_providers_tk, text="Home", height=2, width=3, bd=1, font=('Arial 14'), #Home Button
+                           command=satellite_service_providers_tk.destroy)
+    homereturn.place(x=10, y=5) #Home button placement 
+ 
+    ################## Buttons
+    satellite_service_provider_title = tk.Label(satellite_service_providers_tk,  #Satellite service provider title label
+                                                text="Satellite Service Providers", borderwidth = 2, 
+                                                relief="solid", height=6,width=28, anchor="center", 
+                                                wraplength=200)
+    satellite_service_provider_title.place(x=270, y=15) #Satellite service provider title label placement 
+ 
+    northrop_grumman_button = tk.Button(satellite_service_providers_tk, text="Northrup Grumman Website", #Northrup Grumman Website Button 
+                                        anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                        wraplength=200, command=northrop_grumman_website_link_confirm)
+    northrop_grumman_button.place(x=350, y=180) #Northup Grumman Website Button Placement 
+   
+    rocket_lab_button = tk.Button(satellite_service_providers_tk, text="Rocket Lab Website", #Rocket Lab Website Button 
+                                  anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                  wraplength=200, command=rocket_lab_website_link_confirm)
+    rocket_lab_button.place(x=350, y=300) #Rocket Lab Website Button Placement 
+   
+    boeing_button = tk.Button(satellite_service_providers_tk, text="Boeing Website", #Boeing Website Button
+                              anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                              wraplength=200, command=boeing_website_link_confirm) #Boeing Website Button Placement 
+    boeing_button.place(x=350, y=420)
+   
+    israeli_aerospace_button = tk.Button(satellite_service_providers_tk, text="IAI Website", #IAI Aerospace Website Button
+                                         anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                         wraplength=200, command=iai_website_link_confirm)
+    israeli_aerospace_button.place(x=350, y=540) #IAI Aerosapce Website Button placement 
+   
+    lockheed_martin_button = tk.Button(satellite_service_providers_tk, text="Lockheed Martin", #Lockheed Martin Website Button
+                                       anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                       wraplength=200, command=lockheed_martin_website_link_confirm)
+    lockheed_martin_button.place(x=350, y=660) #Lockheed Martin Website Button placement 
+    
+    ################## Labels
+    
+    satellite_provider_examples_label = tk.Label(satellite_service_providers_tk,  #Satellite Provider examples label 
+                                     text="Examples of\nSatellite Buses"
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    satellite_provider_examples_label.place(x=600, y=80) #Satellite Provider examples label placement 
+    
+    company_logo_label_provider = tk.Label(satellite_service_providers_tk, text="Company Logos" #Lift Capability Label
+                                     , borderwidth = 2, 
+                         relief="solid", height=2,width=15, anchor="center", wraplength=200)
+    company_logo_label_provider.place(x=100, y=110) #Lift Capabiltity Label Placement 
+    
+    northrup_grumman_label = tk.Label(satellite_service_providers_tk,  #Norhtrup Grumman label 
+                                      text="RapidStar, LEOStar, GEOStar", borderwidth = 2, 
+                                      relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    northrup_grumman_label.place(x=600, y=180) #Northrup Grumman Label placement 
+   
+    rocket_lab_label = tk.Label(satellite_service_providers_tk, text="Photon", borderwidth = 2, #Rocket Lab Label
+                                relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    rocket_lab_label.place(x=600, y=300) #Rocket Lab Label Placement 
+   
+    boeing_label = tk.Label(satellite_service_providers_tk, text="Boeing 601-702", borderwidth = 2,  #Boeing Label
+                            relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    boeing_label.place(x=600, y=420) #Boeing Label Placement 
+   
+    israeli_aerospace_label = tk.Label(satellite_service_providers_tk, text="AMOS", borderwidth = 2, #Israeli Aerospace Label
+                                       relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    israeli_aerospace_label.place(x=600, y=540) #Israeli Aerospace label placement 
+   
+    lockheed_martin_label = tk.Label(satellite_service_providers_tk, text="LM-50 to LM-2100", #Lockheed Martin Label
+                                     anchor="center", relief="solid", height=4, width=20, bd = 2, 
+                                     wraplength=200) 
+    lockheed_martin_label.place(x=600, y=660) #Lockheed martin Label placement 
+    
+    ################## Images
+    
+    northrup_grumman_logo = PIL.Image.open("images/satelliteprovider/northrop_grumman.jpeg") #Northrup Grumman Image Open 
+    northrup_grumman_resized = northrup_grumman_logo.resize((300,100)) #Northrup Grumman image resized 
+    img_northrup_grumman = ImageTk.PhotoImage(northrup_grumman_resized) #Northrup Grumman Image variable assigned 
+    img_northrup_grumman_label = tk.Label(satellite_service_providers_tk,  #Norhtrup Grumman Image Label
+                                          image = img_northrup_grumman, width=300, height=100)
+    img_northrup_grumman_label.place(x=25, y=165) #Northrup Grumman Image Label Placement 
+     
+    rocketlab_logo = PIL.Image.open("images/satelliteprovider/rklb.jpeg") #Rocket Lab Image Open 
+    rocketlab_resized = rocketlab_logo.resize((300,100)) #Northrup Grumman Image resized
+    img_rocketlab = ImageTk.PhotoImage(rocketlab_resized) #Northrup Grumman Image variable assigned 
+    img_rocketlab_label = tk.Label(satellite_service_providers_tk, #Northrup Grumman Image Label 
+                                   image = img_rocketlab, width=300, height=100) 
+    img_rocketlab_label.place(x=25, y=285) #Northrup Grumman Image Label Placement 
+    
+    boeing_logo = PIL.Image.open("images/satelliteprovider/boeing.jpeg") #Boeing Image Open 
+    boeing_resized = boeing_logo.resize((300,100)) #Boeing Image resized 
+    img_boeing = ImageTk.PhotoImage(boeing_resized) #Boeing Image variable assigned
+    img_boeing_label = tk.Label(satellite_service_providers_tk, #Boeing Image label 
+                                image = img_boeing, width=300, height=100)
+    img_boeing_label.place(x=25, y=405) #Boeing Image Label placement 
+    
+    iai_logo = PIL.Image.open("images/satelliteprovider/iai.jpeg") #IAI Image Open
+    iai_resized = iai_logo.resize((300,100)) #IAI Image resized 
+    img_iai = ImageTk.PhotoImage(iai_resized) #IAI image variable assigned 
+    img_iai_label = tk.Label(satellite_service_providers_tk, image = img_iai, width=300, height=100) #IAI Image Label 
+    img_iai_label.place(x=25, y=525) #IAI Label Placement 
+    
+    lockheed_martin_logo = PIL.Image.open("images/satelliteprovider/lockheed_martin.jpeg") #Lockheed Martin Image Open 
+    lockheed_martin_resized = lockheed_martin_logo.resize((300,100)) #Lockheed Martin Image Resized 
+    img_lockheed_martin = ImageTk.PhotoImage(lockheed_martin_resized) #Lockheed Martin Image variable assigned 
+    img_lockheed_martin_label = tk.Label(satellite_service_providers_tk, #Lockheed Martin Label
+                                         image = img_lockheed_martin, width=300, height=100)
+    img_lockheed_martin_label.place(x=25, y=645) #Lockheed Martin Label placement 
+   
+    ###### Images
+
+    satellite_service_providers_tk.mainloop()   #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+ 
+def satellite_parts_service_providers_page(): #Function of the satellite parts service provider page 
+    satellite__parts_service_providers_tk = tk.Tk() #Creates the Tk root for the satellite parts service provider page 
+    satellite__parts_service_providers_tk.geometry("800x800") #Specifies the size and geometry of the page 
+    satellite__parts_service_providers_tk.resizable(False, False) #Sets the page to be non resizeable 
+    satellite__parts_service_providers_tk.configure(background="#509be6") #Sets the page to the specified background colour 
+
+    
+    homereturn = tk.Button(satellite__parts_service_providers_tk, text="Home", font=('Arial 14'), #Home button
+                           height=2, width=3, bd=1, command=satellite__parts_service_providers_tk.destroy)
+    homereturn.place(x=10, y=5) #Home button placement 
+   
+    ################## Buttons
+    satellite_parts_service_title = tk.Label(satellite__parts_service_providers_tk,  #Satellite parts service title 
+                                             text="Satellite Parts Service Providers", 
+                                             borderwidth = 2, relief="solid", height=6,width=28, 
+                                             anchor="center", wraplength=200)
+    satellite_parts_service_title.place(x=270, y=15) #Satellite parts service title provider 
+   
+    honeywell_button = tk.Button(satellite__parts_service_providers_tk, #Honeywell Website Button
+                                 text="Honeywell Website", anchor="center", relief="solid", 
+                                 height=4, width=20, bd = 2, wraplength=200, command=honeywell_website_link_confirm)
+    honeywell_button.place(x=350, y=180) #Honeywell Website Button placement 
+   
+    bae_systems_button = tk.Button(satellite__parts_service_providers_tk,  #BAE Systems Website Button
+                                   text="BAE Systems Website", anchor="center", relief="solid", 
+                                   height=4, width=20, bd = 2, wraplength=200, command=bae_systems_website_link_confirm)
+    bae_systems_button.place(x=350, y=300) #BAE Systems Website Button Placement 
+   
+    lockheed_martin_button = tk.Button(satellite__parts_service_providers_tk,  #Lockheed Martin Website Button
+                                       text="Boeing Website", anchor="center", relief="solid", 
+                                       height=4, width=20, bd = 2, wraplength=200, command=lockheed_martin_website_link_confirm)
+    lockheed_martin_button.place(x=350, y=420) #Lockheed Martin Website Button Placement 
+   
+    rocket_lab_button = tk.Button(satellite__parts_service_providers_tk, #Rocket Lab Website Button
+                                  text="Rocket Lab Website", anchor="center", relief="solid", 
+                                  height=4, width=20, bd = 2, wraplength=200, command=rocket_lab_website_link_confirm)
+    rocket_lab_button.place(x=350, y=540) #Rocket Lab Website Button placement 
+   
+    northrop_grumman_button = tk.Button(satellite__parts_service_providers_tk,  #Northrup Grumman Website button 
+                                        text="Northrup Grumman Website", anchor="center", relief="solid", 
+                                        height=4, width=20, bd = 2, wraplength=200, 
+                                        command=northrop_grumman_website_link_confirm)
+    northrop_grumman_button.place(x=350, y=660) #Northrup Grumman Website Button placement 
+    
+    ################## Labels
+    satellite_part_provider_examples_label = tk.Label(satellite__parts_service_providers_tk,  #Satellite part provider examples label
+                                     text="Examples of\nSatellite Parts"
+                                     , borderwidth = 2, 
+                         relief="solid", height=4,width=20, anchor="center", wraplength=200)
+    satellite_part_provider_examples_label.place(x=600, y=80) #Satellite part provider examples label placement 
+    
+    company_logo_label_parts = tk.Label(satellite__parts_service_providers_tk, text="Company Logos" #Lift Capability Label
+                                     , borderwidth = 2, 
+                         relief="solid", height=2,width=15, anchor="center", wraplength=200)
+    company_logo_label_parts.place(x=100, y=110) #Lift Capabiltity Label Placement 
+   
+    honeywell_label = tk.Label(satellite__parts_service_providers_tk, #Honeywell label 
+                               text="Communications, Computer Systems, Structure, Remote Sensing", 
+                               borderwidth = 2, relief="solid", height=4,width=20, anchor="center", 
+                               wraplength=200)
+    honeywell_label.place(x=600, y=180) #Honeywell Label placement 
+   
+    bae_systems_label = tk.Label(satellite__parts_service_providers_tk,  #BAE systems label 
+                                 text="Computer Systems, Remote Sensing, Planetary Protection", 
+                                 borderwidth = 2, relief="solid", height=4,width=20, anchor="center", 
+                                 wraplength=200)
+    bae_systems_label.place(x=600, y=300) #BAE systems label placement 
+   
+    lockheed_martin_label = tk.Label(satellite__parts_service_providers_tk,  #Lockheed Martin Label
+                                     text="Structure, Computer Systems, Communications", 
+                                     borderwidth = 2, relief="solid", height=4,width=20, anchor="center",
+                                     wraplength=200)
+    lockheed_martin_label.place(x=600, y=420) #Lockheed Martin Label placement 
+   
+    rocket_lab_label = tk.Label(satellite__parts_service_providers_tk,  #Rocket Lab Label 
+                                text="Propulsion, Attitude Control, Software, Communcations", 
+                                borderwidth = 2, relief="solid", height=4,width=20, anchor="center", 
+                                wraplength=200)
+    rocket_lab_label.place(x=600, y=540) #Rocket lab Label Placement 
+   
+    northrup_grumman_label = tk.Label(satellite__parts_service_providers_tk,  #Northrup Grumman Label 
+                                      text="Structure, Payload, Remote Sensing, Power", 
+                                      borderwidth = 2, relief="solid", height=4,width=20, anchor="center", 
+                                      wraplength=200)
+    northrup_grumman_label.place(x=600, y=660) #Northrup Grumman Label Placement 
+    
+    ################### Images
+    
+    honeywell_logo = PIL.Image.open("images/satellitepartprovider/honeywell.jpeg") #Honeywell Image Open 
+    honeywell_resized = honeywell_logo.resize((300,100)) #Honeywell image resized 
+    img_honeywell = ImageTk.PhotoImage(honeywell_resized) #Honeywell Image variable assigned 
+    img_honeywell_label = tk.Label(satellite__parts_service_providers_tk, #Honeywell Label
+                                   image = img_honeywell, width=300, height=100)
+    img_honeywell_label.place(x=25, y=165) #Honeywell Label Placement 
+    
+    bae_systems_logo = PIL.Image.open("images/satellitepartprovider/bae_systems.jpeg") #BAE Systems Image Open 
+    bae_systems_resized = bae_systems_logo.resize((300,100)) #BAE Systems image resized 
+    img_bae_systems = ImageTk.PhotoImage(bae_systems_resized) #BAE Systems Image variable assigned 
+    img_bae_systems_label = tk.Label(satellite__parts_service_providers_tk, #BAE Systems Label
+                                     image = img_bae_systems, width=300, height=100)
+    img_bae_systems_label.place(x=25, y=285) #BAE Systems Label Placement 
+    
+    boeing_logo = PIL.Image.open("images/satellitepartprovider/boeing.jpeg") #Boeing Image Open 
+    boeing_resized = boeing_logo.resize((300,100)) #Boeing image resized 
+    img_boeing = ImageTk.PhotoImage(boeing_resized) #Boeing Image variable assigned 
+    img_boeing_label = tk.Label(satellite__parts_service_providers_tk,  #Boeing Label
+                                image = img_boeing, width=300, height=100) #Boeing Image Open 
+    img_boeing_label.place(x=25, y=405) #Boeing label placement 
+    
+    rocketlab_logo = PIL.Image.open("images/satellitepartprovider/rklb.jpeg") #Rocket Lab Image Open  
+    rocketlab_resized = rocketlab_logo.resize((300,100)) #Rocket Lab image resized 
+    img_rocketlab = ImageTk.PhotoImage(rocketlab_resized) #Rocket Lab Image variable assigned 
+    img_rocketlab_label = tk.Label(satellite__parts_service_providers_tk, #Rocket Lab Label
+                                   image = img_rocketlab, width=300, height=100)
+    img_rocketlab_label.place(x=25, y=525) #Rocket Lab Label placement 
+    
+    northrup_grumman_logo = PIL.Image.open("images/satellitepartprovider/northrop_grumman.jpeg")#Northrup Grumman Image Open 
+    northrup_grumman_resized = northrup_grumman_logo.resize((300,100)) #Northrup Grumman image resized 
+    img_northrup_grumman = ImageTk.PhotoImage(northrup_grumman_resized) #Northrup Grumman Image variable assigned 
+    img_northrup_grumman_label = tk.Label(satellite__parts_service_providers_tk, #Lockheed Martin Label
+                                          image = img_northrup_grumman, width=300, height=100)
+    img_northrup_grumman_label.place(x=25, y=645) #Norhtrup Grumman Label Placement
+    
+    
+    #########################################
+     
+    satellite__parts_service_providers_tk.mainloop()   #Mainloop allows for continous recieving of inputs for as long as the root is alive 
+ 
+#STARTS THE CODE DO NOT TOUCH!   
+mainmenu_page()
+#STARTS THE CODE DO NOT TOUCH!
+  
