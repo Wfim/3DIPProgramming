@@ -1150,15 +1150,7 @@ def launch_vehicle_page(mainmenu): #Function for launch vehicles page
           "the 'Show launch vehicle Data' button. The page shows a variety of information."
           " From payload capacity to flight faliure rates.")
     ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=250, font=('Arial 18'))
-    launch_vehicle_page_information_header.place(x=50, y=420) #Launch vehicle page information header label
-
-    launch_vehicle_page_information_interpret = tk.Label(launch_vehicle_tk, #Launch vehicle page information interpret label
-    text=("How do we interpret this data?\n"
-          " \nPayload Capacity: This is the total mass the launch vehicle can lift into a specific orbit."
-          " \nLaunch Success: Simple percentage of Success to Failed launches."
-          " \nUser Friendliness: A rating of what class of customer should fly.")
-    ,relief = "solid", anchor="center", bd = 2, width = 28, height = 15, wraplength=250, font=('Arial 18'))
-    launch_vehicle_page_information_interpret.place(x=430, y=420) #Launch vehicle page information interpret label placement
+    launch_vehicle_page_information_header.place(x=245, y=420) #Launch vehicle page information header label
 
 
     label_vehicle_dropdown = tk.Label(launch_vehicle_tk, text="Dropdown Menu", #Drop downmenu label
